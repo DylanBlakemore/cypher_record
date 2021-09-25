@@ -2,7 +2,7 @@ require "spec_helper"
 
 RSpec.describe CypherRecord::PropertyDefinition do
 
-  subject { described_class.new(name, type, null, default) }
+  subject { described_class.new(name, [type], null, default) }
 
   let(:name) { :foo_name }
   let(:type) { String }
@@ -33,9 +33,9 @@ RSpec.describe CypherRecord::PropertyDefinition do
     end
   end
 
-  describe "#type" do
-    it "returns the data type" do
-      expect(subject.type).to eq(String)
+  describe "#types" do
+    it "returns the data types" do
+      expect(subject.types).to eq([String])
     end
   end
 

@@ -1,12 +1,12 @@
 module CypherRecord
   class PropertyDefinition
 
-    attr_reader :name, :type, :null, :default
+    attr_reader :name, :types, :null, :default
 
-    def initialize(name, type, null, default)
-      raise(ArgumentError, "Invalid default #{default} supplied for property '#{name}', expected #{type}") unless default.nil? || default.is_a?(type)
+    def initialize(name, types, null, default)
+      raise(ArgumentError, "Invalid default #{default} supplied for property '#{name}', expected #{types.join(",")}") unless default.nil? || types.include?(default.class)
       @name = name
-      @type = type
+      @types = types
       @null = null
       @default = default
     end
