@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 require 'active_support/core_ext/hash'
 require 'active_support/core_ext/array'
+require 'securerandom'
 
 require_relative "cypher_record/version"
 

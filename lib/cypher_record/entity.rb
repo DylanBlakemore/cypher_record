@@ -16,7 +16,7 @@ module CypherRecord
       self.to_s
     end
 
-    def initialize(id, **props)
+    def initialize(id: SecureRandom.alphanumeric(3), **props)
       @id = id
       validate_props(props)
       @properties = optional_props.merge(props)

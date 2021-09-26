@@ -10,11 +10,17 @@ RSpec.describe CypherRecord::Entity do
 
   let(:klass) { DummyCypherEntityClass }
 
-  it "raises an exception if the required properties have not been defined" do
-    expect { klass.new(:n, req_1: "bar") }.to raise_error(ArgumentError, "Required properties req_2 missing for DummyCypherEntityClass")
+  it "assigns a default alphanumeric id if the id is not defined" do
+    entity = klass.new(req_1: 1, req_2: 2, opt_1: "bar")
+    expect(entity.id.size).to eq(3)
+    expect(entity.id.match?(/[^a-zA-Z0-9]/)).to eq(false)
   end
 
-  let(:entity) { klass.new(:n, req_1: 1, req_2: 2, opt_1: "bar") }
+  it "raises an exception if the required properties have not been defined" do
+    expect { klass.new(id: :n, req_1: "bar") }.to raise_error(ArgumentError, "Required properties req_2 missing for DummyCypherEntityClass")
+  end
+
+  let(:entity) { klass.new(id: :n, req_1: 1, req_2: 2, opt_1: "bar") }
 
   it "assigns the correct instance variables" do
     expect(entity.req_1).to eq(1)
