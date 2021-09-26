@@ -1,5 +1,8 @@
-name: My workflow
-on: [pull_request]
+name: CI
+on:
+  pull_request:
+  push:
+    branches: master
 jobs:
   test:
     runs-on: ubuntu-latest
