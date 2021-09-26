@@ -17,6 +17,8 @@ require_relative "cypher_record/migration/node_definition"
 
 # Models
 require_relative "cypher_record/entity"
+require_relative "cypher_record/node"
+require_relative "cypher_record/edge"
 
 module CypherRecord
   class Error < StandardError; end
