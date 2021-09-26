@@ -14,7 +14,7 @@ RSpec.describe CypherRecord::Edge do
   describe "#to_s" do
     it "correctly formats the edge" do
       expect(subject.to_s).to eq(
-        "[n:DummyCypherRecordEdgeClass {one: 1, two: 'two'}]"
+        "[n:DUMMY_CYPHER_RECORD_EDGE_CLASS {one: 1, two: 'two'}]"
       )
     end
 
@@ -23,7 +23,7 @@ RSpec.describe CypherRecord::Edge do
 
       it "does not include the variable name in the string" do
         expect(subject.to_s).to eq(
-          "[:DummyCypherRecordEdgeClass {one: 1, two: 'two'}]"
+          "[:DUMMY_CYPHER_RECORD_EDGE_CLASS {one: 1, two: 'two'}]"
         )
       end
     end
@@ -33,7 +33,7 @@ RSpec.describe CypherRecord::Edge do
 
       it "does not include the properties" do
         expect(subject.to_s).to eq(
-          "[n:CypherRecordEdgeClassWithoutProperties]"
+          "[n:CYPHER_RECORD_EDGE_CLASS_WITHOUT_PROPERTIES]"
         )
       end
     end
