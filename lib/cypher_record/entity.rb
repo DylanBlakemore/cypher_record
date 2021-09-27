@@ -1,13 +1,11 @@
 module CypherRecord
   class Entity
 
-    attr_reader :id, :properties
+    attr_reader :variable_name, :properties
 
-    def self.properties(*required_props, **optional_props)
-      @required_props = required_props
-      @optional_props = optional_props
-
-      (required_props + optional_props.keys).each do |prop|
+    def self.properties(*props)
+      @properties = props
+      props.each do |prop|
         attr_reader prop
       end
     end
@@ -16,12 +14,11 @@ module CypherRecord
       self.to_s
     end
 
-    def initialize(id: nil, **props)
-      @id = id
-      validate_props(props)
-      @properties = optional_props.merge(props)
-      @properties.each do |key, value|
-        self.instance_variable_set("@#{key}", value)
+    def initialize(variable_name: nil, **props)
+      @variable_name = variable_name
+      @properties = props
+      property_keys.each do |key|
+        self.instance_variable_set("@#{key}", props[key])
       end
     end
 
@@ -35,7 +32,7 @@ module CypherRecord
 
     def to_s
       str = ""
-      str << id.to_s if id
+      str << variable_name.to_s if variable_name
       str << ":#{label}"
       str << " #{property_string}" if properties.present?
       str
@@ -43,8 +40,8 @@ module CypherRecord
 
     private
 
-    def self.variable_name
-      @variable_name ||= self.to_s.underscore.downcase
+    def self.default_variable_name
+      @default_variable_name ||= self.to_s.underscore.downcase
     end
 
     def formatted_properties
@@ -53,21 +50,8 @@ module CypherRecord
       end.join(", ")
     end
 
-    def required_props
-      self.class.instance_variable_get(:@required_props) || []
-    end
-
-    def optional_props
-      self.class.instance_variable_get(:@optional_props) || {}
-    end
-
     def property_keys
-      @property_keys ||= required_props + optional_props.keys
-    end
-
-    def validate_props(props)
-      missing_props = (required_props - props.keys)
-      raise(ArgumentError, "Required properties #{missing_props.join(", ")} missing for #{self.class}") if missing_props.present?
+      @property_keys ||= self.class.instance_variable_get(:@properties) || []
     end
 
   end

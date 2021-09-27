@@ -3,27 +3,21 @@ require "spec_helper"
 RSpec.describe CypherRecord::Entity do
   
   class DummyCypherEntityClass < CypherRecord::Entity
-    properties :req_1, :req_2, opt_1: nil, opt_2: "foo"
+    properties :foo, :bar
   end
 
   let(:klass) { DummyCypherEntityClass }
 
-  it "raises an exception if the required properties have not been defined" do
-    expect { klass.new(id: :n, req_1: "bar") }.to raise_error(ArgumentError, "Required properties req_2 missing for DummyCypherEntityClass")
-  end
-
-  let(:entity) { klass.new(id: :n, req_1: 1, req_2: 2, opt_1: "bar") }
+  let(:entity) { klass.new(variable_name: :n, foo: "Foo", bar: 1) }
 
   it "assigns the correct instance variables" do
-    expect(entity.req_1).to eq(1)
-    expect(entity.req_2).to eq(2)
-    expect(entity.opt_1).to eq("bar")
-    expect(entity.opt_2).to eq("foo")
+    expect(entity.foo).to eq("Foo")
+    expect(entity.bar).to eq(1)
   end
 
   describe "#to_s" do
     it "creates the base string" do
-      expect(entity.to_s).to eq("n:DummyCypherEntityClass {req_1: 1, req_2: 2, opt_1: 'bar', opt_2: 'foo'}")
+      expect(entity.to_s).to eq("n:DummyCypherEntityClass {foo: 'Foo', bar: 1}")
     end
   end
 
@@ -35,7 +29,7 @@ RSpec.describe CypherRecord::Entity do
 
   describe "#property_string" do
     let(:property_string) do
-      "{req_1: 1, req_2: 2, opt_1: 'bar', opt_2: 'foo'}"
+      "{foo: 'Foo', bar: 1}"
     end
 
     it "returns the correctly formatted property string" do
