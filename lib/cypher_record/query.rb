@@ -43,6 +43,10 @@ module CypherRecord
       query.map(&:to_s).join(" ")
     end
 
+    def resolve
+      CypherRecord.engine.query(to_s)
+    end
+
     private
 
     def append_token(operator, operand)
