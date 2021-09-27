@@ -15,6 +15,10 @@ module CypherRecord
       "#{node_string(left)} #{left_arrow} #{edge.to_s} #{right_arrow} #{node_string(right)}"
     end
 
+    def edge_only
+      CypherRecord::Relationship.new("(#{left.id})", edge, "(#{right.id})", direction)
+    end
+
     private
 
     def node_string(node)

@@ -17,6 +17,12 @@ RSpec.describe CypherRecord::Relationship do
 
   let(:edge) { RelationshipDummyEdgeClass.new(id: :e, foobar: "Foobar") }
 
+  describe "#edge_only" do
+    it "uses the IDs from the nodes" do
+      expect(subject.edge_only.to_s).to eq("(n) - [e:RELATIONSHIP_DUMMY_EDGE_CLASS {foobar: 'Foobar'}] - (m)")
+    end
+  end
+
   describe "#to_s" do
     it "returns the correct string" do
       expect(subject.to_s).to eq(
