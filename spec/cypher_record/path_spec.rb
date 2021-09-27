@@ -1,6 +1,6 @@
 require "spec_helper"
 
-RSpec.describe CypherRecord::Pattern do
+RSpec.describe CypherRecord::Path do
   
   subject { described_class.from_node(initial, as: initial_type) }
 

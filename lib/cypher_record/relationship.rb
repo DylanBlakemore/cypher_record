@@ -3,8 +3,13 @@ module CypherRecord
 
     def self.create(left_node, right_node, **props)
       relationship = self.new(variable_name: default_variable_name, **props)
-      pattern = CypherRecord::Pattern.from_node(left_node, as: :variable).has_variable(right_node, via: relationship)
-      CypherRecord::Query.new.match(left_node).match(right_node).create(pattern).return(relationship).resolve
+      path = CypherRecord::Path.from_node(left_node, as: :variable).has_variable(right_node, via: relationship)
+      CypherRecord::Query.new
+        .match(left_node)
+        .match(right_node)
+        .create(path)
+        .return(relationship)
+        .resolve
     end
 
     private

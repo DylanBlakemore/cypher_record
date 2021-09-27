@@ -1,10 +1,10 @@
 module CypherRecord
-  class Pattern
+  class Path
 
     attr_reader :tokens
 
     def self.from_node(node, as: :entity)
-      CypherRecord::Pattern.new([entity_string(node, as)])
+      CypherRecord::Path.new([entity_string(node, as)])
     end
 
     def initialize(tokens)
@@ -70,7 +70,7 @@ module CypherRecord
     MUTUAL = "-"
 
     def mutual_relation(node, relationship)
-      CypherRecord::Pattern.new(
+      CypherRecord::Path.new(
         [
           *tokens,
           MUTUAL,
@@ -82,7 +82,7 @@ module CypherRecord
     end
 
     def right_relation(node, relationship)
-      CypherRecord::Pattern.new(
+      CypherRecord::Path.new(
         [
           *tokens,
           MUTUAL,
@@ -94,7 +94,7 @@ module CypherRecord
     end
 
     def left_relation(node, relationship)
-      CypherRecord::Pattern.new(
+      CypherRecord::Path.new(
         [
           *tokens,
           LEFT,

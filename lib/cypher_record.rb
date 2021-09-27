@@ -23,7 +23,7 @@ require_relative "cypher_record/engine"
 require_relative "cypher_record/entity"
 require_relative "cypher_record/node"
 require_relative "cypher_record/relationship"
-require_relative "cypher_record/pattern"
+require_relative "cypher_record/path"
 
 #Querying
 require_relative "cypher_record/token"
