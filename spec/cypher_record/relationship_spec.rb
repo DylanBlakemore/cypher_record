@@ -43,5 +43,13 @@ RSpec.describe CypherRecord::Relationship do
         )
       end
     end
+
+    context "when the direction is invalid" do
+      subject { described_class.new(left, edge, right, :foo) }
+
+      it "raise an exception" do
+        expect { subject }.to raise_error(ArgumentError, "Relationship direction can only be forwards, backwards, or mutual")
+      end
+    end
   end
 end

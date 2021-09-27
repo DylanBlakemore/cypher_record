@@ -4,6 +4,7 @@ module CypherRecord
     attr_reader :left, :edge, :right, :direction
 
     def initialize(left, edge, right, direction=:mutual)
+      raise(ArgumentError, "Relationship direction can only be forwards, backwards, or mutual") unless [:mutual, :backwards, :forwards].include?(direction)
       @left = left
       @edge = edge
       @right = right
@@ -28,8 +29,6 @@ module CypherRecord
         MUTUAL_POINTER
       when :backwards
         LEFT_POINTER
-      else
-        raise_direction_error
       end
     end
 
@@ -41,13 +40,7 @@ module CypherRecord
         RIGHT_POINTER
       when :backwards
         MUTUAL_POINTER
-      else
-        raise_direction_error
       end
-    end
-
-    def raise_direction_error
-      raise(ArgumentError, "Relationship direction can only be forwards, backwards, or mutual")
     end
 
   end
