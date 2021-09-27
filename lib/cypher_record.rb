@@ -22,8 +22,8 @@ require_relative "cypher_record/engine"
 # Models
 require_relative "cypher_record/entity"
 require_relative "cypher_record/node"
-require_relative "cypher_record/edge"
 require_relative "cypher_record/relationship"
+require_relative "cypher_record/pattern"
 
 #Querying
 require_relative "cypher_record/token"

@@ -1,55 +1,21 @@
 module CypherRecord
-  class Relationship
+  class Relationship < CypherRecord::Entity
 
-    attr_reader :left, :edge, :right, :direction
+    def self.create(left_node, right_node, direction: :forwards, **props)
+      edge = self.new(id: variable_name, **props)
+      relationship = CypherRecord::Pattern.new(left_node, edge, right_node, direction).edge_only
+      CypherRecord::Query.new.match(left_node).match(right_node).create(relationship).return(edge).resolve
+    end
 
-    def initialize(left, edge, right, direction=:mutual)
-      raise(ArgumentError, "Relationship direction can only be forwards, backwards, or mutual") unless [:mutual, :backwards, :forwards].include?(direction)
-      @left = left
-      @edge = edge
-      @right = right
-      @direction = direction
+    def self.type
+      super.underscore.upcase
     end
 
     def to_s
-      "#{node_string(left)} #{left_arrow} #{edge.to_s} #{right_arrow} #{node_string(right)}"
-    end
-
-    def edge_only
-      CypherRecord::Relationship.new("(#{left.id})", edge, "(#{right.id})", direction)
+      "[#{super}]"
     end
 
     private
-
-    def node_string(node)
-      node&.to_s || "()"
-    end
-
-    LEFT_POINTER = "<-"
-    RIGHT_POINTER = "->"
-    MUTUAL_POINTER = "-"
-
-    def left_arrow
-      case direction
-      when :mutual
-        MUTUAL_POINTER
-      when :forwards
-        MUTUAL_POINTER
-      when :backwards
-        LEFT_POINTER
-      end
-    end
-
-    def right_arrow
-      case direction
-      when :mutual
-        MUTUAL_POINTER
-      when :forwards
-        RIGHT_POINTER
-      when :backwards
-        MUTUAL_POINTER
-      end
-    end
 
   end
 end

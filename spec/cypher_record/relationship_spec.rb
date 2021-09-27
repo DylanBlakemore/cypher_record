@@ -1,80 +1,60 @@
 require "spec_helper"
 
 RSpec.describe CypherRecord::Relationship do
-  
-  subject { described_class.new(left, edge, right) }
 
-  class RelationshipDummyNodeClass < CypherRecord::Node
-    properties :foo, :bar
+  class DummyCypherRecordEdgeClass < CypherRecord::Relationship
+    properties :one, :two
   end
 
-  class RelationshipDummyEdgeClass < CypherRecord::Edge
-    properties :foobar
+  class CypherRecordEdgeClassWithoutProperties < CypherRecord::Relationship
   end
 
-  let(:left) { RelationshipDummyNodeClass.new(id: :n, foo: "foo_1", bar: "bar_1") }
-  let(:right) { RelationshipDummyNodeClass.new(id: :m, foo: "foo_2", bar: "bar_2") }
+  subject { DummyCypherRecordEdgeClass.new(id: :n, one: 1, two: "two") }
 
-  let(:edge) { RelationshipDummyEdgeClass.new(id: :e, foobar: "Foobar") }
+  describe ".create" do
+    class FooNode < CypherRecord::Node
+      properties :foo
+    end
 
-  describe "#edge_only" do
-    it "uses the IDs from the nodes" do
-      expect(subject.edge_only.to_s).to eq("(n) - [e:RELATIONSHIP_DUMMY_EDGE_CLASS {foobar: 'Foobar'}] - (m)")
+    class BarEdge < CypherRecord::Relationship
+      properties :bar
+    end
+
+    let(:left_node) { FooNode.new(id: :foo_1, foo: "Foo 1") }
+    let(:right_node) { FooNode.new(id: :foo_2, foo: "Foo 2") }
+
+    it "correctly formats the query" do
+      expect(CypherRecord.engine).to receive(:query).with(
+        "MATCH (foo_1:FooNode {foo: 'Foo 1'}) MATCH (foo_2:FooNode {foo: 'Foo 2'}) CREATE (foo_1) - [bar_edge:BAR_EDGE {bar: 'Bar'}] -> (foo_2) RETURN bar_edge"
+      )
+      BarEdge.create(left_node, right_node, bar: "Bar")
     end
   end
 
   describe "#to_s" do
-    it "returns the correct string" do
+    it "correctly formats the edge" do
       expect(subject.to_s).to eq(
-        "(n:RelationshipDummyNodeClass {foo: 'foo_1', bar: 'bar_1'}) - [e:RELATIONSHIP_DUMMY_EDGE_CLASS {foobar: 'Foobar'}] - (m:RelationshipDummyNodeClass {foo: 'foo_2', bar: 'bar_2'})"
+        "[n:DUMMY_CYPHER_RECORD_EDGE_CLASS {one: 1, two: 'two'}]"
       )
     end
 
-    context "when the left node is nil" do
-      let(:left) { nil }
+    context "when an id is not defined" do
+      subject { DummyCypherRecordEdgeClass.new(one: 1, two: "two") }
 
-      it "returns the correct string" do
+      it "does not include the variable name in the string" do
         expect(subject.to_s).to eq(
-          "() - [e:RELATIONSHIP_DUMMY_EDGE_CLASS {foobar: 'Foobar'}] - (m:RelationshipDummyNodeClass {foo: 'foo_2', bar: 'bar_2'})"
+          "[:DUMMY_CYPHER_RECORD_EDGE_CLASS {one: 1, two: 'two'}]"
         )
       end
     end
 
-    context "when the right node is nil" do
-      let(:right) { nil }
+    context "when no properties are defined" do
+      subject { CypherRecordEdgeClassWithoutProperties.new(id: :n) }
 
-      it "returns the correct string" do
+      it "does not include the properties" do
         expect(subject.to_s).to eq(
-          "(n:RelationshipDummyNodeClass {foo: 'foo_1', bar: 'bar_1'}) - [e:RELATIONSHIP_DUMMY_EDGE_CLASS {foobar: 'Foobar'}] - ()"
+          "[n:CYPHER_RECORD_EDGE_CLASS_WITHOUT_PROPERTIES]"
         )
-      end
-    end
-
-    context "when the direction is forwards" do
-      subject { described_class.new(left, edge, right, :forwards) }
-
-      it "returns the correct string" do
-        expect(subject.to_s).to eq(
-          "(n:RelationshipDummyNodeClass {foo: 'foo_1', bar: 'bar_1'}) - [e:RELATIONSHIP_DUMMY_EDGE_CLASS {foobar: 'Foobar'}] -> (m:RelationshipDummyNodeClass {foo: 'foo_2', bar: 'bar_2'})"
-        )
-      end
-    end
-
-    context "when the direction is backwards" do
-      subject { described_class.new(left, edge, right, :backwards) }
-
-      it "returns the correct string" do
-        expect(subject.to_s).to eq(
-          "(n:RelationshipDummyNodeClass {foo: 'foo_1', bar: 'bar_1'}) <- [e:RELATIONSHIP_DUMMY_EDGE_CLASS {foobar: 'Foobar'}] - (m:RelationshipDummyNodeClass {foo: 'foo_2', bar: 'bar_2'})"
-        )
-      end
-    end
-
-    context "when the direction is invalid" do
-      subject { described_class.new(left, edge, right, :foo) }
-
-      it "raise an exception" do
-        expect { subject }.to raise_error(ArgumentError, "Relationship direction can only be forwards, backwards, or mutual")
       end
     end
   end
