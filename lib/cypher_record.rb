@@ -20,6 +20,7 @@ require_relative "cypher_record/migration/node_definition"
 require_relative "cypher_record/entity"
 require_relative "cypher_record/node"
 require_relative "cypher_record/edge"
+require_relative "cypher_record/relationship"
 
 #Querying
 require_relative "cypher_record/token"

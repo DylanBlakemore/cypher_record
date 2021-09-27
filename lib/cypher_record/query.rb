@@ -34,7 +34,7 @@ module CypherRecord
     def set(entity, property, value)
       CypherRecord::Query.new(
         append_token(
-          "SET", "#{entity.id}.#{property} = #{CypherRecord::Formatter.format_property(value)}"
+            "SET", "#{entity.id}.#{property} = #{CypherRecord::Formatter.format_property(value)}"
           )
         )
     end
