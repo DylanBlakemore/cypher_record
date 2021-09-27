@@ -12,10 +12,14 @@ module CypherRecord
     end
 
     def to_s
-      "#{left.to_s} #{left_arrow} #{edge.to_s} #{right_arrow} #{right.to_s}"
+      "#{node_string(left)} #{left_arrow} #{edge.to_s} #{right_arrow} #{node_string(right)}"
     end
 
     private
+
+    def node_string(node)
+      node&.to_s || "()"
+    end
 
     LEFT_POINTER = "<-"
     RIGHT_POINTER = "->"

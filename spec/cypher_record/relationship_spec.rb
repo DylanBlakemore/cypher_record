@@ -24,6 +24,26 @@ RSpec.describe CypherRecord::Relationship do
       )
     end
 
+    context "when the left node is nil" do
+      let(:left) { nil }
+
+      it "returns the correct string" do
+        expect(subject.to_s).to eq(
+          "() - [e:RELATIONSHIP_DUMMY_EDGE_CLASS {foobar: 'Foobar'}] - (m:RelationshipDummyNodeClass {foo: 'foo_2', bar: 'bar_2'})"
+        )
+      end
+    end
+
+    context "when the right node is nil" do
+      let(:right) { nil }
+
+      it "returns the correct string" do
+        expect(subject.to_s).to eq(
+          "(n:RelationshipDummyNodeClass {foo: 'foo_1', bar: 'bar_1'}) - [e:RELATIONSHIP_DUMMY_EDGE_CLASS {foobar: 'Foobar'}] - ()"
+        )
+      end
+    end
+
     context "when the direction is forwards" do
       subject { described_class.new(left, edge, right, :forwards) }
 
