@@ -16,6 +16,9 @@ require_relative "cypher_record/migration/node_definition"
 
 # CLI
 
+# Query Engine
+require_relative "cypher_record/engine"
+
 # Models
 require_relative "cypher_record/entity"
 require_relative "cypher_record/node"
@@ -28,4 +31,23 @@ require_relative "cypher_record/query"
 
 module CypherRecord
   class Error < StandardError; end
+
+  def self.engine
+    @engine ||= config.engine
+  end
+
+  def self.configure(&block)
+    yield config
+  end
+
+  private
+
+  class Config
+    attr_accessor :engine
+  end
+
+  def self.config
+    @config ||= Config.new
+  end
+
 end
