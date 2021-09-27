@@ -39,7 +39,7 @@ module CypherRecord
         )
     end
 
-    def resolve
+    def to_s
       query.map(&:to_s).join(" ")
     end
 

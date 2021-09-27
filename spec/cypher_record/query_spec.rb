@@ -11,49 +11,49 @@ RSpec.describe CypherRecord::Query do
   
   describe "#create" do
     it "builds the correct query" do
-      expect(query.create(node).resolve).to eq("CREATE (n:QueryDummyNodeClass {foo: 'foo', bar: 'bar'})")
+      expect(query.create(node).to_s).to eq("CREATE (n:QueryDummyNodeClass {foo: 'foo', bar: 'bar'})")
     end
 
     context "with return" do
       it "builds the correct query" do
-        expect(query.create(node).return(node).resolve).to eq("CREATE (n:QueryDummyNodeClass {foo: 'foo', bar: 'bar'}) RETURN n")
+        expect(query.create(node).return(node).to_s).to eq("CREATE (n:QueryDummyNodeClass {foo: 'foo', bar: 'bar'}) RETURN n")
       end
     end
   end
 
   describe "#match" do
     it "builds the correct query" do
-      expect(query.match(node).resolve).to eq("MATCH (n:QueryDummyNodeClass {foo: 'foo', bar: 'bar'})")
+      expect(query.match(node).to_s).to eq("MATCH (n:QueryDummyNodeClass {foo: 'foo', bar: 'bar'})")
     end
   end
 
   describe "#merge" do
     it "builds the correct query" do
-      expect(query.merge(node).resolve).to eq("MERGE (n:QueryDummyNodeClass {foo: 'foo', bar: 'bar'})")
+      expect(query.merge(node).to_s).to eq("MERGE (n:QueryDummyNodeClass {foo: 'foo', bar: 'bar'})")
     end
   end
 
   describe "#destroy" do
     it "builds the correct query" do
-      expect(query.destroy(node).resolve).to eq("DETACH DELETE n")
+      expect(query.destroy(node).to_s).to eq("DETACH DELETE n")
     end
   end
 
   describe "#delete" do
     it "builds the correct query" do
-      expect(query.delete(node).resolve).to eq("DELETE n")
+      expect(query.delete(node).to_s).to eq("DELETE n")
     end
   end
 
   describe "#return" do
     it "builds the correct query" do
-      expect(query.return(node).resolve).to eq("RETURN n")
+      expect(query.return(node).to_s).to eq("RETURN n")
     end
   end
 
   describe "#set" do
     it "builds the correct query" do
-      expect(query.set(node, :foo, "new_value").resolve).to eq("SET n.foo = 'new_value'")
+      expect(query.set(node, :foo, "new_value").to_s).to eq("SET n.foo = 'new_value'")
     end
   end
 end
