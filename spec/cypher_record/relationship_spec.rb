@@ -25,7 +25,7 @@ RSpec.describe CypherRecord::Relationship do
 
     it "correctly formats the query" do
       expect(CypherRecord.engine).to receive(:query).with(
-        "MATCH (foo_1:FooNode {foo: 'Foo 1'}) MATCH (foo_2:FooNode {foo: 'Foo 2'}) CREATE (foo_1) - [bar_edge:BAR_EDGE {bar: 'Bar'}] -> (foo_2) RETURN bar_edge"
+        "MATCH (foo_1:FooNode {foo: 'Foo 1'}) MATCH (foo_2:FooNode {foo: 'Foo 2'}) CREATE (foo_1) - [bar_edge:BarEdge {bar: 'Bar'}] -> (foo_2) RETURN bar_edge"
       )
       BarEdge.create(left_node, right_node, bar: "Bar")
     end
@@ -34,7 +34,7 @@ RSpec.describe CypherRecord::Relationship do
   describe "#to_s" do
     it "correctly formats the edge" do
       expect(subject.to_s).to eq(
-        "[n:DUMMY_CYPHER_RECORD_EDGE_CLASS {one: 1, two: 'two'}]"
+        "[n:DummyCypherRecordEdgeClass {one: 1, two: 'two'}]"
       )
     end
 
@@ -43,7 +43,7 @@ RSpec.describe CypherRecord::Relationship do
 
       it "does not include the variable name in the string" do
         expect(subject.to_s).to eq(
-          "[:DUMMY_CYPHER_RECORD_EDGE_CLASS {one: 1, two: 'two'}]"
+          "[:DummyCypherRecordEdgeClass {one: 1, two: 'two'}]"
         )
       end
     end
@@ -53,7 +53,7 @@ RSpec.describe CypherRecord::Relationship do
 
       it "does not include the properties" do
         expect(subject.to_s).to eq(
-          "[n:CYPHER_RECORD_EDGE_CLASS_WITHOUT_PROPERTIES]"
+          "[n:CypherRecordEdgeClassWithoutProperties]"
         )
       end
     end

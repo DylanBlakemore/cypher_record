@@ -7,10 +7,6 @@ module CypherRecord
       CypherRecord::Query.new.match(left_node).match(right_node).create(relationship).return(edge).resolve
     end
 
-    def self.type
-      super.underscore.upcase
-    end
-
     def to_s
       "[#{super}]"
     end

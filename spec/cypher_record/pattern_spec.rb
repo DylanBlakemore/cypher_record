@@ -19,14 +19,14 @@ RSpec.describe CypherRecord::Pattern do
 
   describe "#edge_only" do
     it "uses the IDs from the nodes" do
-      expect(subject.edge_only.to_s).to eq("(n) - [e:RELATIONSHIP_DUMMY_EDGE_CLASS {foobar: 'Foobar'}] - (m)")
+      expect(subject.edge_only.to_s).to eq("(n) - [e:RelationshipDummyEdgeClass {foobar: 'Foobar'}] - (m)")
     end
   end
 
   describe "#to_s" do
     it "returns the correct string" do
       expect(subject.to_s).to eq(
-        "(n:RelationshipDummyNodeClass {foo: 'foo_1', bar: 'bar_1'}) - [e:RELATIONSHIP_DUMMY_EDGE_CLASS {foobar: 'Foobar'}] - (m:RelationshipDummyNodeClass {foo: 'foo_2', bar: 'bar_2'})"
+        "(n:RelationshipDummyNodeClass {foo: 'foo_1', bar: 'bar_1'}) - [e:RelationshipDummyEdgeClass {foobar: 'Foobar'}] - (m:RelationshipDummyNodeClass {foo: 'foo_2', bar: 'bar_2'})"
       )
     end
 
@@ -35,7 +35,7 @@ RSpec.describe CypherRecord::Pattern do
 
       it "returns the correct string" do
         expect(subject.to_s).to eq(
-          "() - [e:RELATIONSHIP_DUMMY_EDGE_CLASS {foobar: 'Foobar'}] - (m:RelationshipDummyNodeClass {foo: 'foo_2', bar: 'bar_2'})"
+          "() - [e:RelationshipDummyEdgeClass {foobar: 'Foobar'}] - (m:RelationshipDummyNodeClass {foo: 'foo_2', bar: 'bar_2'})"
         )
       end
     end
@@ -45,7 +45,7 @@ RSpec.describe CypherRecord::Pattern do
 
       it "returns the correct string" do
         expect(subject.to_s).to eq(
-          "(n:RelationshipDummyNodeClass {foo: 'foo_1', bar: 'bar_1'}) - [e:RELATIONSHIP_DUMMY_EDGE_CLASS {foobar: 'Foobar'}] - ()"
+          "(n:RelationshipDummyNodeClass {foo: 'foo_1', bar: 'bar_1'}) - [e:RelationshipDummyEdgeClass {foobar: 'Foobar'}] - ()"
         )
       end
     end
@@ -55,7 +55,7 @@ RSpec.describe CypherRecord::Pattern do
 
       it "returns the correct string" do
         expect(subject.to_s).to eq(
-          "(n:RelationshipDummyNodeClass {foo: 'foo_1', bar: 'bar_1'}) - [e:RELATIONSHIP_DUMMY_EDGE_CLASS {foobar: 'Foobar'}] -> (m:RelationshipDummyNodeClass {foo: 'foo_2', bar: 'bar_2'})"
+          "(n:RelationshipDummyNodeClass {foo: 'foo_1', bar: 'bar_1'}) - [e:RelationshipDummyEdgeClass {foobar: 'Foobar'}] -> (m:RelationshipDummyNodeClass {foo: 'foo_2', bar: 'bar_2'})"
         )
       end
     end
@@ -65,7 +65,7 @@ RSpec.describe CypherRecord::Pattern do
 
       it "returns the correct string" do
         expect(subject.to_s).to eq(
-          "(n:RelationshipDummyNodeClass {foo: 'foo_1', bar: 'bar_1'}) <- [e:RELATIONSHIP_DUMMY_EDGE_CLASS {foobar: 'Foobar'}] - (m:RelationshipDummyNodeClass {foo: 'foo_2', bar: 'bar_2'})"
+          "(n:RelationshipDummyNodeClass {foo: 'foo_1', bar: 'bar_1'}) <- [e:RelationshipDummyEdgeClass {foobar: 'Foobar'}] - (m:RelationshipDummyNodeClass {foo: 'foo_2', bar: 'bar_2'})"
         )
       end
     end

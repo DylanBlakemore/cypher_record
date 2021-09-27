@@ -29,7 +29,7 @@ RSpec.describe CypherRecord::Entity do
 
   describe "#type" do
     it "returns the class name" do
-      expect(entity.type).to eq("DummyCypherEntityClass")
+      expect(entity.label).to eq("DummyCypherEntityClass")
     end
   end
 

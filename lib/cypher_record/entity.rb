@@ -12,7 +12,7 @@ module CypherRecord
       end
     end
 
-    def self.type
+    def self.label
       self.to_s
     end
 
@@ -25,8 +25,8 @@ module CypherRecord
       end
     end
 
-    def type
-      self.class.type
+    def label
+      self.class.label
     end
 
     def property_string
@@ -36,7 +36,7 @@ module CypherRecord
     def to_s
       str = ""
       str << id.to_s if id
-      str << ":#{type}"
+      str << ":#{label}"
       str << " #{property_string}" if properties.present?
       str
     end
