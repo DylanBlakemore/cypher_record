@@ -3,9 +3,7 @@ require "spec_helper"
 RSpec.describe CypherRecord::Entity do
   
   class DummyCypherEntityClass < CypherRecord::Entity
-
     properties :req_1, :req_2, opt_1: nil, opt_2: "foo"
-
   end
 
   let(:klass) { DummyCypherEntityClass }
@@ -21,6 +19,12 @@ RSpec.describe CypherRecord::Entity do
     expect(entity.req_2).to eq(2)
     expect(entity.opt_1).to eq("bar")
     expect(entity.opt_2).to eq("foo")
+  end
+
+  describe "#to_s" do
+    it "creates the base string" do
+      expect(entity.to_s).to eq("n:DummyCypherEntityClass {req_1: 1, req_2: 2, opt_1: 'bar', opt_2: 'foo'}")
+    end
   end
 
   describe "#type" do

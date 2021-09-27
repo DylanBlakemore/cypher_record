@@ -1,13 +1,13 @@
 module CypherRecord
   class Node < CypherRecord::Entity
 
+    def self.create(props)
+      entity = self.new(id: variable_name, **props)
+      CypherRecord::Query.new.create(entity).return(entity).resolve
+    end
+
     def to_s
-      str = "("
-      str << id.to_s if id
-      str << ":#{type}"
-      str << " #{property_string}" if properties.present?
-      str << ")"
-      str
+      "(#{super})"
     end
 
     private

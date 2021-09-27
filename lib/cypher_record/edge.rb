@@ -6,12 +6,7 @@ module CypherRecord
     end
 
     def to_s
-      str = "["
-      str << id.to_s if id
-      str << ":#{type}"
-      str << " #{property_string}" if properties.present?
-      str << "]"
-      str
+      "[#{super}]"
     end
 
     private

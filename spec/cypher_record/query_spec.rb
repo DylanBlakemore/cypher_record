@@ -59,9 +59,7 @@ RSpec.describe CypherRecord::Query do
 
   describe "#resolve" do
     it "uses the engine to resolve the query" do
-      engine = CypherRecord::Engine.new
-      CypherRecord.configure { |config| config.engine = engine }
-      expect(engine).to receive(:query).with("MATCH (n:QueryDummyNodeClass {foo: 'foo', bar: 'bar'})").and_return nil
+      expect(CypherRecord.engine).to receive(:query).with("MATCH (n:QueryDummyNodeClass {foo: 'foo', bar: 'bar'})").and_return nil
       query.match(node).resolve
     end
   end

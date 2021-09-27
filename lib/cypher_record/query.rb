@@ -19,7 +19,7 @@ module CypherRecord
       CypherRecord::Query.new(append_token("MATCH", entity))
     end
 
-    def return(nodes, properties=nil)
+    def return(nodes)
       CypherRecord::Query.new(append_token("RETURN", Array(nodes).map(&:id).join(", ")))
     end
 

@@ -33,7 +33,19 @@ module CypherRecord
       "{#{formatted_properties}}"
     end
 
+    def to_s
+      str = ""
+      str << id.to_s if id
+      str << ":#{type}"
+      str << " #{property_string}" if properties.present?
+      str
+    end
+
     private
+
+    def self.variable_name
+      @variable_name ||= self.to_s.underscore.downcase
+    end
 
     def formatted_properties
       property_keys.map do |property_key|

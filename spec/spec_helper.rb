@@ -17,6 +17,10 @@ def suppress_log_output
 end
 
 RSpec.configure do |config|
+  config.before(:all) do
+    CypherRecord.configure { |config| config.engine = CypherRecord::Engine.new }
+  end
+
   config.before(:each) do
     suppress_log_output
   end
