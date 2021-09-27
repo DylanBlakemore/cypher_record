@@ -15,25 +15,23 @@ RSpec.describe CypherRecord::Entity do
     expect(entity.bar).to eq(1)
   end
 
-  describe "#to_s" do
-    it "creates the base string" do
-      expect(entity.to_s).to eq("n:DummyCypherEntityClass {foo: 'Foo', bar: 1}")
+  describe "#token" do
+    context "when the type is :entity" do
+      it "raise an appropriate error" do
+        expect { entity.realize(:entity) }.to raise_error(NotImplementedError, "DummyCypherEntityClass must implement 'entity_token' method")
+      end
+    end
+
+    context "when the type is :variable" do
+      it "raise an appropriate error" do
+        expect { entity.realize(:variable) }.to raise_error(NotImplementedError, "DummyCypherEntityClass must implement 'variable_token' method")
+      end
     end
   end
 
-  describe "#type" do
+  describe "#label" do
     it "returns the class name" do
       expect(entity.label).to eq("DummyCypherEntityClass")
-    end
-  end
-
-  describe "#property_string" do
-    let(:property_string) do
-      "{foo: 'Foo', bar: 1}"
-    end
-
-    it "returns the correctly formatted property string" do
-      expect(entity.property_string).to eq(property_string)
     end
   end
 end

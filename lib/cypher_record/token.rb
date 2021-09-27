@@ -8,7 +8,7 @@ module CypherRecord
       @operand = operand
     end
 
-    def to_s
+    def realize
       [operator, operand&.to_s].compact.join(" ")
     end
 

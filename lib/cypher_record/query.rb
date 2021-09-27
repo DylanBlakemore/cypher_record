@@ -8,15 +8,15 @@ module CypherRecord
     end
 
     def merge(entity)
-      CypherRecord::Query.new(append_token("MERGE", entity))
+      CypherRecord::Query.new(append_token("MERGE", entity.realize))
     end
 
     def create(entity)
-      CypherRecord::Query.new(append_token("CREATE", entity))
+      CypherRecord::Query.new(append_token("CREATE", entity.realize))
     end
 
     def match(entity)
-      CypherRecord::Query.new(append_token("MATCH", entity))
+      CypherRecord::Query.new(append_token("MATCH", entity.realize))
     end
 
     def return(entity)
@@ -39,12 +39,12 @@ module CypherRecord
         )
     end
 
-    def to_s
-      query.map(&:to_s).join(" ")
+    def realize
+      query.map(&:realize).join(" ")
     end
 
     def resolve
-      CypherRecord.engine.query(to_s)
+      CypherRecord.engine.query(self.realize)
     end
 
     private

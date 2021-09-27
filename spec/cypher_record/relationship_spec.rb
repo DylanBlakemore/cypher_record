@@ -31,9 +31,9 @@ RSpec.describe CypherRecord::Relationship do
     end
   end
 
-  describe "#to_s" do
+  describe "#token" do
     it "correctly formats the edge" do
-      expect(subject.to_s).to eq(
+      expect(subject.realize).to eq(
         "[n:DummyCypherRecordEdgeClass {one: 1, two: 'two'}]"
       )
     end
@@ -42,7 +42,7 @@ RSpec.describe CypherRecord::Relationship do
       subject { DummyCypherRecordEdgeClass.new(one: 1, two: "two") }
 
       it "does not include the variable name in the string" do
-        expect(subject.to_s).to eq(
+        expect(subject.realize).to eq(
           "[:DummyCypherRecordEdgeClass {one: 1, two: 'two'}]"
         )
       end
@@ -52,7 +52,7 @@ RSpec.describe CypherRecord::Relationship do
       subject { CypherRecordEdgeClassWithoutProperties.new(variable_name: :n) }
 
       it "does not include the properties" do
-        expect(subject.to_s).to eq(
+        expect(subject.realize).to eq(
           "[n:CypherRecordEdgeClassWithoutProperties]"
         )
       end

@@ -6,11 +6,15 @@ module CypherRecord
       CypherRecord::Query.new.create(entity).return(entity).resolve
     end
 
-    def to_s
-      "(#{super})"
+    private
+
+    def entity_token
+      "(#{base_entity_token})"
     end
 
-    private
+    def variable_token
+      "(#{variable_name})"
+    end
 
   end
 end

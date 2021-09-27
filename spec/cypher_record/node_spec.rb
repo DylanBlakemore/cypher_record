@@ -20,9 +20,9 @@ RSpec.describe CypherRecord::Node do
     end
   end
 
-  describe "#to_s" do
+  describe "#token" do
     it "correctly formats the node" do
-      expect(subject.to_s).to eq(
+      expect(subject.realize).to eq(
         "(n:DummyCypherRecordNodeClass {one: 1, two: 'two'})"
       )
     end
@@ -31,7 +31,7 @@ RSpec.describe CypherRecord::Node do
       subject { DummyCypherRecordNodeClass.new(one: 1, two: "two") }
 
       it "does not include the variable name in the string" do
-        expect(subject.to_s).to eq(
+        expect(subject.realize).to eq(
           "(:DummyCypherRecordNodeClass {one: 1, two: 'two'})"
         )
       end
@@ -41,9 +41,15 @@ RSpec.describe CypherRecord::Node do
       subject { CypherRecordNodeClassWithoutProperties.new(variable_name: :n) }
 
       it "does not include the properties" do
-        expect(subject.to_s).to eq(
+        expect(subject.realize).to eq(
           "(n:CypherRecordNodeClassWithoutProperties)"
         )
+      end
+    end
+
+    context "when the variable token is requested" do
+      it "correctly formats the node" do
+        expect(subject.realize(:variable)).to eq("(n)")
       end
     end
   end

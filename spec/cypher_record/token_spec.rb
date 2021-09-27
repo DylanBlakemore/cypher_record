@@ -6,7 +6,7 @@ RSpec.describe CypherRecord::Token do
 
   describe "#to_s" do
     it "combines the operator and operand" do
-      expect(subject.to_s).to eq("MERGE foo")
+      expect(subject.realize).to eq("MERGE foo")
     end
   end
 end
