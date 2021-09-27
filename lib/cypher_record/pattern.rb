@@ -16,7 +16,7 @@ module CypherRecord
     end
 
     def edge_only
-      CypherRecord::Pattern.new("(#{left.id})", edge, "(#{right.id})", direction)
+      CypherRecord::Pattern.new("(#{left.variable_name})", edge, "(#{right.variable_name})", direction)
     end
 
     private

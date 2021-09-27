@@ -19,22 +19,22 @@ module CypherRecord
       CypherRecord::Query.new(append_token("MATCH", entity))
     end
 
-    def return(nodes)
-      CypherRecord::Query.new(append_token("RETURN", Array(nodes).map(&:id).join(", ")))
+    def return(entity)
+      CypherRecord::Query.new(append_token("RETURN", entity.variable_name))
     end
 
     def delete(entity)
-      CypherRecord::Query.new(append_token("DELETE", entity.id))
+      CypherRecord::Query.new(append_token("DELETE", entity.variable_name))
     end
 
     def destroy(entity)
-      CypherRecord::Query.new(append_token("DETACH DELETE", entity.id))
+      CypherRecord::Query.new(append_token("DETACH DELETE", entity.variable_name))
     end
 
     def set(entity, property, value)
       CypherRecord::Query.new(
         append_token(
-            "SET", "#{entity.id}.#{property} = #{CypherRecord::Formatter.format_property(value)}"
+            "SET", "#{entity.variable_name}.#{property} = #{CypherRecord::Formatter.format_property(value)}"
           )
         )
     end

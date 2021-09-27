@@ -9,7 +9,7 @@ RSpec.describe CypherRecord::Node do
   class CypherRecordNodeClassWithoutProperties < CypherRecord::Node
   end
 
-  subject { DummyCypherRecordNodeClass.new(id: :n, one: 1, two: "two") }
+  subject { DummyCypherRecordNodeClass.new(variable_name: :n, one: 1, two: "two") }
 
   describe ".create" do
     it "creates the node with the default variable name" do
@@ -38,7 +38,7 @@ RSpec.describe CypherRecord::Node do
     end
 
     context "when no properties are defined" do
-      subject { CypherRecordNodeClassWithoutProperties.new(id: :n) }
+      subject { CypherRecordNodeClassWithoutProperties.new(variable_name: :n) }
 
       it "does not include the properties" do
         expect(subject.to_s).to eq(

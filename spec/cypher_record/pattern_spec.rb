@@ -12,10 +12,10 @@ RSpec.describe CypherRecord::Pattern do
     properties :foobar
   end
 
-  let(:left) { RelationshipDummyNodeClass.new(id: :n, foo: "foo_1", bar: "bar_1") }
-  let(:right) { RelationshipDummyNodeClass.new(id: :m, foo: "foo_2", bar: "bar_2") }
+  let(:left) { RelationshipDummyNodeClass.new(variable_name: :n, foo: "foo_1", bar: "bar_1") }
+  let(:right) { RelationshipDummyNodeClass.new(variable_name: :m, foo: "foo_2", bar: "bar_2") }
 
-  let(:edge) { RelationshipDummyEdgeClass.new(id: :e, foobar: "Foobar") }
+  let(:edge) { RelationshipDummyEdgeClass.new(variable_name: :e, foobar: "Foobar") }
 
   describe "#edge_only" do
     it "uses the IDs from the nodes" do

@@ -9,7 +9,7 @@ RSpec.describe CypherRecord::Relationship do
   class CypherRecordEdgeClassWithoutProperties < CypherRecord::Relationship
   end
 
-  subject { DummyCypherRecordEdgeClass.new(id: :n, one: 1, two: "two") }
+  subject { DummyCypherRecordEdgeClass.new(variable_name: :n, one: 1, two: "two") }
 
   describe ".create" do
     class FooNode < CypherRecord::Node
@@ -20,8 +20,8 @@ RSpec.describe CypherRecord::Relationship do
       properties :bar
     end
 
-    let(:left_node) { FooNode.new(id: :foo_1, foo: "Foo 1") }
-    let(:right_node) { FooNode.new(id: :foo_2, foo: "Foo 2") }
+    let(:left_node) { FooNode.new(variable_name: :foo_1, foo: "Foo 1") }
+    let(:right_node) { FooNode.new(variable_name: :foo_2, foo: "Foo 2") }
 
     it "correctly formats the query" do
       expect(CypherRecord.engine).to receive(:query).with(
@@ -49,7 +49,7 @@ RSpec.describe CypherRecord::Relationship do
     end
 
     context "when no properties are defined" do
-      subject { CypherRecordEdgeClassWithoutProperties.new(id: :n) }
+      subject { CypherRecordEdgeClassWithoutProperties.new(variable_name: :n) }
 
       it "does not include the properties" do
         expect(subject.to_s).to eq(

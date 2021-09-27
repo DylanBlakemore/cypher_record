@@ -6,7 +6,7 @@ RSpec.describe CypherRecord::Query do
     properties :foo, :bar
   end
 
-  let(:node) { QueryDummyNodeClass.new(id: :n, foo: "foo", bar: "bar") }
+  let(:node) { QueryDummyNodeClass.new(variable_name: :n, foo: "foo", bar: "bar") }
   let(:query) { described_class.new }
   
   describe "#create" do
