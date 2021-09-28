@@ -2,8 +2,8 @@ module CypherRecord
   class Node < CypherRecord::Entity
 
     def self.create(**props)
-      entity = self.new(variable_name: default_variable_name, **props)
-      CypherRecord::Query.new.create(entity).return(entity).resolve
+      node = self.new(variable_name: default_variable_name, **props)
+      CypherRecord::Query.new(entity: node).create.return.resolve
     end
 
     private

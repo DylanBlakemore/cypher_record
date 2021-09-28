@@ -1,42 +1,41 @@
 module CypherRecord
   class Query
 
-    attr_reader :query
+    attr_reader :query, :base_entity
 
-    def initialize(query=[])
+    def initialize(query: [], entity: nil)
       @query = query
+      @base_entity = entity
     end
 
-    def merge(entity)
-      CypherRecord::Query.new(append_token("MERGE", entity.realize))
+    def merge(entity=nil)
+      append_entity("MERGE", entity)
     end
 
-    def create(entity)
-      CypherRecord::Query.new(append_token("CREATE", entity.realize))
+    def create(entity=nil)
+      append_entity("CREATE", entity)
     end
 
-    def match(entity)
-      CypherRecord::Query.new(append_token("MATCH", entity.realize))
+    def match(entity=nil)
+      append_entity("MATCH", entity)
     end
 
-    def return(entity)
-      CypherRecord::Query.new(append_token("RETURN", entity.variable_name))
+    def return(entity=nil)
+      append_variable("RETURN", entity)
     end
 
-    def delete(entity)
-      CypherRecord::Query.new(append_token("DELETE", entity.variable_name))
+    def delete(entity=nil)
+      append_variable("DELETE", entity)
     end
 
-    def destroy(entity)
-      CypherRecord::Query.new(append_token("DETACH DELETE", entity.variable_name))
+    def destroy(entity=nil)
+      append_variable("DETACH DELETE", entity)
     end
 
-    def set(entity, property, value)
-      CypherRecord::Query.new(
-        append_token(
-            "SET", "#{entity.variable_name}.#{property} = #{CypherRecord::Formatter.format_property(value)}"
-          )
-        )
+    def set(property, value, entity=nil)
+      append("SET", entity) do |entity|
+        "#{entity.variable_name}.#{property} = #{CypherRecord::Formatter.format_property(value)}"
+      end
     end
 
     def realize
@@ -49,8 +48,28 @@ module CypherRecord
 
     private
 
-    def append_token(operator, operand)
-      query.append(CypherRecord::Token.new(operator, operand))
+    def append(operator, entity, &block)
+      appended_value = yield (focus_entity(entity))
+      append_to_query(operator, appended_value)
+    end
+
+    def append_variable(operator, entity)
+      append_to_query(operator, focus_entity(entity).variable_name)
+    end
+
+    def append_entity(operator, entity)
+      append_to_query(operator, focus_entity(entity).realize)
+    end
+
+    def append_to_query(operator, value)
+      CypherRecord::Query.new(
+        query: query.append(CypherRecord::Token.new(operator, value)),
+        entity: base_entity
+      )
+    end
+
+    def focus_entity(entity)
+      entity || base_entity
     end
 
   end

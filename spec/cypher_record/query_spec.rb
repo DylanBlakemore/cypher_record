@@ -8,52 +8,117 @@ RSpec.describe CypherRecord::Query do
 
   let(:node) { QueryDummyNodeClass.new(variable_name: :n, foo: "foo", bar: "bar") }
   let(:query) { described_class.new }
+  let(:base_query) { described_class.new(entity: node) }
   
   describe "#create" do
+    let(:query_string) { "CREATE (n:QueryDummyNodeClass {foo: 'foo', bar: 'bar'})" }
+
     it "builds the correct query" do
-      expect(query.create(node).realize).to eq("CREATE (n:QueryDummyNodeClass {foo: 'foo', bar: 'bar'})")
+      expect(query.create(node).realize).to eq(query_string)
+    end
+
+    context "with a base entity" do
+      it "builds the correct query" do
+        expect(base_query.create.realize).to eq(query_string)
+      end
     end
 
     context "with return" do
+      let(:query_string) { "CREATE (n:QueryDummyNodeClass {foo: 'foo', bar: 'bar'}) RETURN n" }
+
       it "builds the correct query" do
         expect(query.create(node).return(node).realize).to eq("CREATE (n:QueryDummyNodeClass {foo: 'foo', bar: 'bar'}) RETURN n")
+      end
+
+      context "with a base entity" do
+        it "builds the correct query" do
+          expect(base_query.create.return.realize).to eq(query_string)
+        end
       end
     end
   end
 
   describe "#match" do
+    let(:query_string) { "MATCH (n:QueryDummyNodeClass {foo: 'foo', bar: 'bar'})" }
+
     it "builds the correct query" do
-      expect(query.match(node).realize).to eq("MATCH (n:QueryDummyNodeClass {foo: 'foo', bar: 'bar'})")
+      expect(query.match(node).realize).to eq(query_string)
+    end
+
+    context "with a base entity" do
+      it "builds the correct query" do
+        expect(base_query.match.realize).to eq(query_string)
+      end
     end
   end
 
   describe "#merge" do
+    let(:query_string) { "MERGE (n:QueryDummyNodeClass {foo: 'foo', bar: 'bar'})" }
+
     it "builds the correct query" do
-      expect(query.merge(node).realize).to eq("MERGE (n:QueryDummyNodeClass {foo: 'foo', bar: 'bar'})")
+      expect(query.merge(node).realize).to eq(query_string)
+    end
+
+    context "with a base entity" do
+      it "builds the correct query" do
+        expect(base_query.merge.realize).to eq(query_string)
+      end
     end
   end
 
   describe "#destroy" do
+    let(:query_string) { "DETACH DELETE n" }
+
     it "builds the correct query" do
-      expect(query.destroy(node).realize).to eq("DETACH DELETE n")
+      expect(query.destroy(node).realize).to eq(query_string)
+    end
+
+    context "with a base entity" do
+      it "builds the correct query" do
+        expect(base_query.destroy.realize).to eq(query_string)
+      end
     end
   end
 
   describe "#delete" do
+    let(:query_string) { "DELETE n" }
+
     it "builds the correct query" do
-      expect(query.delete(node).realize).to eq("DELETE n")
+      expect(query.delete(node).realize).to eq(query_string)
+    end
+
+    context "with a base entity" do
+      it "builds the correct query" do
+        expect(base_query.delete.realize).to eq(query_string)
+      end
     end
   end
 
   describe "#return" do
+    let(:query_string) { "RETURN n" }
+
     it "builds the correct query" do
-      expect(query.return(node).realize).to eq("RETURN n")
+      expect(query.return(node).realize).to eq(query_string)
+    end
+
+    context "with a base entity" do
+      it "builds the correct query" do
+        expect(base_query.return.realize).to eq(query_string)
+      end
     end
   end
 
   describe "#set" do
+    let(:query_string) { "SET n.foo = 'new_value'" }
+
     it "builds the correct query" do
-      expect(query.set(node, :foo, "new_value").realize).to eq("SET n.foo = 'new_value'")
+      expect(query.set(:foo, "new_value", node).realize).to eq(query_string)
+    end
+
+    context "with a base entity" do
+      it "builds the correct query" do
+        expect(base_query.set(:foo, "new_value").realize).to eq(query_string)
+      end
     end
   end
 
