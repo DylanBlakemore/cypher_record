@@ -6,12 +6,23 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      NEO4J_EDITION_FLAG: -e
+      NEO4J_VERSION: 4.3.3
+      driver: ruby
     steps:
     - uses: actions/checkout@v2
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: 2.7.2 # Not needed with a .ruby-version file
         bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+    - name: Setup Neo4j
+      run: |
+        neoctrl-install $NEO4J_EDITION_FLAG $NEO4J_VERSION servers
+        if [ -n "$NEO4J_EDITION_FLAG" ]; then NEO4J_EDITION=enterprise; else NEO4J_EDITION=community; fi
+        NEO4J_DIR=servers/neo4j-$NEO4J_EDITION-$NEO4J_VERSION
+        neoctrl-configure $NEO4J_DIR dbms.memory.pagecache.size=600m dbms.memory.heap.max_size=600m dbms.memory.heap.initial_size=600m dbms.directories.import= dbms.connectors.default_listen_address=:: dbms.security.auth_enabled=false
+        neoctrl-start $NEO4J_DIR
     - name: Rspec
       run: bundle exec rspec
     - name: Upload coverage results
