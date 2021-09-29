@@ -26,7 +26,7 @@ jobs:
       run: |
         sudo apt-get install -y libssl1.1
         wget https://github.com/neo4j-drivers/seabolt/releases/download/v1.7.4/seabolt-1.7.4-Linux-ubuntu-18.04.deb
-        dpkg -i seabolt-1.7.4-Linux-ubuntu-18.04.deb
+        sudo dpkg -i seabolt-1.7.4-Linux-ubuntu-18.04.deb
         rm seabolt-1.7.4-Linux-ubuntu-18.04.deb
     - name: Setup Neo4j
       run: |
