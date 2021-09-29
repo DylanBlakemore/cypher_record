@@ -16,6 +16,8 @@ def suppress_log_output
   allow(STDOUT).to receive(:puts) # this disables puts
 end
 
+RSpec::Mocks.configuration.allow_message_expectations_on_nil = true
+
 RSpec.configure do |config|
   config.before(:each) do
     suppress_log_output

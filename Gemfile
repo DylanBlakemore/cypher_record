@@ -9,7 +9,5 @@ gem "rake", "~> 13.0"
 gem "rspec", "~> 3.0"
 
 group :test, :development do
-  gem "pry"
-  gem "pry-byebug"
   gem "neo4j-ruby-driver"
 end
