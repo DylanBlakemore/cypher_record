@@ -12,4 +12,8 @@ RSpec.describe CypherRecord do
 
     expect(CypherRecord.engine).to be_a(CypherRecord::Engine)
   end
+
+  it "raises an error when an invalid engine is defined" do
+    expect { CypherRecord.configure { |config| config.engine = "foo" } }.to raise_error(ArgumentError, "Database engine should be a CypherRecord::Engine")
+  end
 end
