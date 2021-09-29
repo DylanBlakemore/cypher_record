@@ -11,7 +11,7 @@ module CypherRecord
     end
 
     def self.label
-      self.to_s
+      self.to_s.gsub("::", "_")
     end
 
     def initialize(variable_name: nil, **props)

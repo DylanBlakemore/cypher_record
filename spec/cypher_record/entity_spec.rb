@@ -33,5 +33,19 @@ RSpec.describe CypherRecord::Entity do
     it "returns the class name" do
       expect(entity.label).to eq("DummyCypherEntityClass")
     end
+
+    context "with a namespaced class" do
+      module Namespaced
+        class DummyCypherEntityClass < CypherRecord::Entity
+          properties :foo, :bar
+        end
+      end
+
+      let(:klass) { Namespaced::DummyCypherEntityClass }
+
+      it "replaces :: with _" do
+        expect(entity.label).to eq("Namespaced_DummyCypherEntityClass")
+      end
+    end
   end
 end
