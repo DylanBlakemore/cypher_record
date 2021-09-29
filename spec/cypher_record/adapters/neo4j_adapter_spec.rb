@@ -46,7 +46,7 @@ RSpec.describe CypherRecord::Adapters::Neo4jAdapter do
         end
 
         it "creates an instance of the required class type" do
-          expect(described_class.adapt(result).first).to be_a(NamespacedNode::Neo4jNodeClass)
+          expect(described_class.adapt(result)).to be_a(NamespacedNode::Neo4jNodeClass)
         end
       end
 
@@ -59,15 +59,15 @@ RSpec.describe CypherRecord::Adapters::Neo4jAdapter do
         end
 
         it "creates an instance of the required class type" do
-          expect(described_class.adapt(result).first).to be_a(Neo4jNodeClass)
+          expect(described_class.adapt(result)).to be_a(Neo4jNodeClass)
         end
 
         it "creates the correct properties" do
-          expect(described_class.adapt(result).first.properties).to eq({foo: "Foo", bar: "Bar"})
+          expect(described_class.adapt(result).properties).to eq({foo: "Foo", bar: "Bar"})
         end
 
         it "assigns the correct variable name" do
-          expect(described_class.adapt(result).first.variable_name).to eq(:foo)
+          expect(described_class.adapt(result).variable_name).to eq(:foo)
         end
       end
 
@@ -80,15 +80,15 @@ RSpec.describe CypherRecord::Adapters::Neo4jAdapter do
         end
 
         it "creates an instance of the required class type" do
-          expect(described_class.adapt(result).first).to be_a(Neo4jRelationshipClass)
+          expect(described_class.adapt(result)).to be_a(Neo4jRelationshipClass)
         end
 
         it "creates the correct properties" do
-          expect(described_class.adapt(result).first.properties).to eq({foo: "Foo", bar: "Bar"})
+          expect(described_class.adapt(result).properties).to eq({foo: "Foo", bar: "Bar"})
         end
 
         it "assigns the correct variable name" do
-          expect(described_class.adapt(result).first.variable_name).to eq(:foo)
+          expect(described_class.adapt(result).variable_name).to eq(:foo)
         end
       end
 
@@ -97,7 +97,7 @@ RSpec.describe CypherRecord::Adapters::Neo4jAdapter do
         let(:values)  { ["foo"] }
 
         it "returns the value" do
-          expect(described_class.adapt(result).first).to eq("foo")
+          expect(described_class.adapt(result)).to eq("foo")
         end
       end
     end

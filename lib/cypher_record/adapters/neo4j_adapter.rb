@@ -3,6 +3,8 @@ module CypherRecord
     class Neo4jAdapter < CypherRecord::EntityAdapter
 
       def self.adapt(result)
+        return adapt_single(result.keys.first, result.values.first) if result.keys.size == 1
+
         [result.keys, result.values].transpose.map do |key, record|
           adapt_single(key, record)
         end

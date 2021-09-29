@@ -1,6 +1,12 @@
 require "spec_helper"
 
-RSpec.describe CypherRecord::Engines::Neo4jEngine, type: :engine do
+RSpec.describe CypherRecord::Engines::Neo4jEngine, type: :neo4j do
+
+  before do
+    class MockNodeClass < CypherRecord::Node
+      properties :foo, :bar
+    end
+  end
 
   subject { described_class.new(uri, user, password) }
 
@@ -18,5 +24,32 @@ RSpec.describe CypherRecord::Engines::Neo4jEngine, type: :engine do
 
   it "sets the username" do
     expect(subject.username).to eq(user)
+  end
+
+  describe "#query" do
+    before do
+      subject.query("CREATE (mock_node_class:MockNodeClass {foo: 'Foo 1', bar: 'Bar 1'})")
+      subject.query("CREATE (mock_node_class:MockNodeClass {foo: 'Foo 2', bar: 'Bar 2'})")
+      subject.query("CREATE (mock_node_class:MockNodeClass {foo: 'Foo 3', bar: 'Bar 3'})")
+    end
+
+    let(:query_result) { subject.query(query) }
+
+    context "for single returns" do
+      let(:query) { "MATCH (n:MockNodeClass) RETURN n" }
+
+      it "returns an array" do
+        expect(query_result.size).to eq(3)
+        expect(query_result.map(&:class)).to eq([MockNodeClass, MockNodeClass, MockNodeClass])
+      end
+    end
+
+    context "for multiple returns" do
+      let(:query) { "MATCH (n:MockNodeClass) RETURN n.foo, n.bar" }
+
+      it "returns an array of arrays" do
+        expect(query_result.sort).to eq([["Foo 1", "Bar 1"], ["Foo 2", "Bar 2"], ["Foo 3", "Bar 3"]])
+      end
+    end
   end
 end

@@ -14,13 +14,6 @@ require_relative "cypher_record/formatter"
 require_relative "cypher_record/engine"
 require_relative "cypher_record/entity_adapter"
 
-begin
-  require "neo4j_ruby_driver"
-  require_relative "cypher_record/engines/neo4j_engine"
-rescue LoadError => e
-  puts "Unable to load Neo4j Ruby driver with error #{e}. If this is a necessary dependency, make sure you include 'gem \"neo4j-ruby-driver\"' in your Gemfile"
-end
-
 # Models
 require_relative "cypher_record/entity"
 require_relative "cypher_record/node"
@@ -32,6 +25,8 @@ require_relative "cypher_record/token"
 require_relative "cypher_record/query"
 
 # Backend adapters
+
+require_relative "cypher_record/includes/neo4j_includes"
 
 module CypherRecord
   class Error < StandardError; end
