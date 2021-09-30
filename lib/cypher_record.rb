@@ -26,7 +26,7 @@ require_relative "cypher_record/query"
 
 # Backend adapters
 
-require_relative "cypher_record/includes/neo4j_includes"
+require_relative "cypher_record/plugins/neo4j/neo4j_includes"
 
 module CypherRecord
   class Error < StandardError; end

@@ -4,7 +4,7 @@ require "simplecov"
 
 SimpleCov.start do
   add_filter "/spec/"
-  add_filter "/cypher_record/includes"
+  add_filter %r{/cypher_record/plugins/.*/.*_includes.rb}
   minimum_coverage 100
   maximum_coverage_drop 0
 end

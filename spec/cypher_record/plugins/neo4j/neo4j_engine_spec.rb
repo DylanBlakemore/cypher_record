@@ -1,6 +1,6 @@
 require "spec_helper"
 
-RSpec.describe CypherRecord::Engines::Neo4jEngine, type: :neo4j do
+RSpec.describe CypherRecord::Plugins::Neo4jEngine, type: :neo4j do
 
   before do
     class MockNodeClass < CypherRecord::Node

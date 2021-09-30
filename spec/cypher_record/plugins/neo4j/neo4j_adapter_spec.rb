@@ -1,6 +1,6 @@
 require "spec_helper"
 
-RSpec.describe CypherRecord::Adapters::Neo4jAdapter do
+RSpec.describe CypherRecord::Plugins::Neo4jAdapter do
 
   let(:keys) { [] }
   let(:values) { [] }

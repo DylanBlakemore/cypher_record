@@ -1,5 +1,5 @@
 module CypherRecord
-  module Adapters
+  module Plugins
     class Neo4jAdapter < CypherRecord::EntityAdapter
 
       def self.adapt(result)

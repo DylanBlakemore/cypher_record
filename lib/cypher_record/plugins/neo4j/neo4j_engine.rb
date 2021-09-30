@@ -1,8 +1,6 @@
 
-require_relative "../adapters/neo4j_adapter"
-
 module CypherRecord
-  module Engines
+  module Plugins
     class Neo4jEngine < CypherRecord::Engine
 
       attr_reader :uri, :username, :password
@@ -15,7 +13,7 @@ module CypherRecord
 
       def query(query)
         results(query).each_entry.map do |entry|
-          CypherRecord::Adapters::Neo4jAdapter.adapt(entry)
+          CypherRecord::Plugins::Neo4jAdapter.adapt(entry)
         end
       end
 
