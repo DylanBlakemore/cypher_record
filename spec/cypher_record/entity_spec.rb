@@ -57,4 +57,11 @@ RSpec.describe CypherRecord::Entity do
       end
     end
   end
+
+  describe ".all" do
+    it "resolves a query which returns all of the nodes with the crrect label" do
+      expect(CypherRecord::Entity.all.realize).to eq("MATCH cypher_record_entity:CypherRecord_Entity RETURN cypher_record_entity")
+      expect(DummyCypherEntityClass.all.realize).to eq("MATCH dummy_cypher_entity_class:DummyCypherEntityClass RETURN dummy_cypher_entity_class")
+    end
+  end
 end

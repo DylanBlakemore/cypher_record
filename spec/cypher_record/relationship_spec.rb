@@ -85,4 +85,10 @@ RSpec.describe CypherRecord::Relationship do
       end
     end
   end
+
+  describe ".all" do
+    it "resolves a query which returns all of the nodes with the correct label" do
+      expect(CypherRecord::Relationship.all.realize).to eq("MATCH [cypher_record_relationship:CypherRecord_Relationship] RETURN cypher_record_relationship")
+    end
+  end
 end

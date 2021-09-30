@@ -26,6 +26,14 @@ module CypherRecord
       self.to_s.gsub("::", "_")
     end
 
+    ## Queries
+
+    def self.all
+      CypherRecord::Query.new(entity: self).match.return
+    end
+
+    ##
+
     def initialize(variable_name: nil, **props)
       @variable_name = variable_name
       super(**props)
