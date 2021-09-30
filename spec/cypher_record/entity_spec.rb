@@ -22,6 +22,21 @@ RSpec.describe CypherRecord::Entity do
     end
   end
 
+  describe "#realize" do
+    context "entity" do
+      it "returns the entity token" do
+        expect(described_class.realize).to eq("cypher_record_entity:CypherRecord_Entity")
+        expect(described_class.realize(:entity)).to eq("cypher_record_entity:CypherRecord_Entity")
+      end
+    end
+
+    context "variable" do
+      it "returns the variable token" do
+        expect(described_class.realize(:variable)).to eq("cypher_record_entity")
+      end
+    end
+  end
+
   describe "#label" do
     it "returns the class name" do
       expect(entity.label).to eq("DummyCypherEntityClass")

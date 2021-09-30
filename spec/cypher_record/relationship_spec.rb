@@ -44,7 +44,21 @@ RSpec.describe CypherRecord::Relationship do
     end
   end
 
-  describe "#token" do
+  describe ".realize" do
+    it "correctly formats the node" do
+      expect(DummyCypherRecordEdgeClass.realize).to eq(
+        "[dummy_cypher_record_edge_class:DummyCypherRecordEdgeClass]"
+      )
+    end
+
+    context "when the variable token is requested" do
+      it "correctly formats the node" do
+        expect(DummyCypherRecordEdgeClass.realize(:variable)).to eq("[dummy_cypher_record_edge_class]")
+      end
+    end
+  end
+
+  describe "#realize" do
     it "correctly formats the edge" do
       expect(subject.realize).to eq(
         "[n:DummyCypherRecordEdgeClass {one: 1, two: 'two'}]"

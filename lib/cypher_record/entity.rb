@@ -44,50 +44,89 @@ module CypherRecord
       end
     end
 
+    def self.realize(token_type = :entity)
+      case token_type
+      when :entity
+        entity_token
+      when :variable
+        variable_token
+      end
+    end
+
     def properties
       attributes.symbolize_keys
     end
 
     private
 
+    def self.entity_token
+      build_token(left_tokenizer, base_entity_token, right_tokenizer)
+    end
+
     def self.variable_token
-      "#{left_tokenizer}#{variable_name}#{right_tokenizer}"
+      build_token(left_tokenizer, variable_name, right_tokenizer)
     end
 
     def entity_token
-      "#{self.class.left_tokenizer}#{base_entity_token}#{self.class.right_tokenizer}"
+      self.class.build_token(left_tokenizer, base_entity_token, right_tokenizer)
     end
 
     def variable_token
-      "#{self.class.left_tokenizer}#{variable_name}#{self.class.right_tokenizer}"
+      self.class.build_token(left_tokenizer, variable_name, right_tokenizer)
+    end
+
+    def self.build_token(left, middle, right)
+      "#{left}#{middle}#{right}"
+    end
+
+    def self.build_entity_token_base(variable_name, label, property_string=nil)
+      token_string = ""
+      token_string << variable_name.to_s if variable_name
+      token_string << ":#{label}"
+      token_string << " #{property_string}" if property_string.present?
+      token_string
+    end
+
+    def self.base_entity_token
+      @base_entity_token ||= build_entity_token_base(variable_name, label)
     end
 
     def base_entity_token
-      @base_entity_token ||= begin
-        token_string = ""
-        token_string << variable_name.to_s if variable_name
-        token_string << ":#{label}"
-        token_string << " #{property_string}" if properties.present?
-        token_string
-      end
+      @base_entity_token ||= self.class.build_entity_token_base(variable_name, label, property_string)
     end
 
     def property_string
-      "{#{formatted_properties}}"
+      @property_string ||= "{#{formatted_properties}}" if formatted_properties.present?
     end
 
     def formatted_properties
-      properties.map do |(property, value)|
+      @formatted_properties ||= properties.map do |(property, value)|
         "#{property}: #{CypherRecord::Format.property(value)}" if value
       end.join(", ")
     end
 
     def self.left_tokenizer
-      @left_tokenizer || self.superclass.left_tokenizer
+      @left_tokenizer || begin
+        self.superclass.left_tokenizer
+      rescue NoMethodError
+        nil
+      end
     end
 
     def self.right_tokenizer
-      @right_tokenizer || self.superclass.right_tokenizer
+      @right_tokenizer || begin
+        self.superclass.right_tokenizer
+      rescue NoMethodError
+        nil
+      end
+    end
+
+    def left_tokenizer
+      @left_tokenizer ||= self.class.left_tokenizer
+    end
+
+    def right_tokenizer
+      @right_tokenizer ||= self.class.right_tokenizer
     end
 
   end
