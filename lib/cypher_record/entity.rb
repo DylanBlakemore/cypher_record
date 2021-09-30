@@ -13,6 +13,15 @@ module CypherRecord
       alias_method :property, :attribute
     end
 
+    def self.tokenize_with(left, right)
+      @left_tokenizer = left
+      @right_tokenizer = right
+    end
+
+    def self.variable_name
+      self.to_s.underscore.downcase.gsub("/", "_")
+    end
+
     def self.label
       self.to_s.gsub("::", "_")
     end
@@ -41,12 +50,16 @@ module CypherRecord
 
     private
 
+    def self.variable_token
+      "#{left_tokenizer}#{variable_name}#{right_tokenizer}"
+    end
+
     def entity_token
-      raise(NotImplementedError, "#{self.class} must implement 'entity_token' method")
+      "#{self.class.left_tokenizer}#{base_entity_token}#{self.class.right_tokenizer}"
     end
 
     def variable_token
-      raise(NotImplementedError, "#{self.class} must implement 'variable_token' method")
+      "#{self.class.left_tokenizer}#{variable_name}#{self.class.right_tokenizer}"
     end
 
     def base_entity_token
@@ -63,14 +76,18 @@ module CypherRecord
       "{#{formatted_properties}}"
     end
 
-    def self.default_variable_name
-      @default_variable_name ||= self.to_s.underscore.downcase
-    end
-
     def formatted_properties
       properties.map do |(property, value)|
         "#{property}: #{CypherRecord::Format.property(value)}" if value
       end.join(", ")
+    end
+
+    def self.left_tokenizer
+      @left_tokenizer || self.superclass.left_tokenizer
+    end
+
+    def self.right_tokenizer
+      @right_tokenizer || self.superclass.right_tokenizer
     end
 
   end

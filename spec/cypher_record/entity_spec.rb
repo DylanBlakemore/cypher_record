@@ -16,17 +16,9 @@ RSpec.describe CypherRecord::Entity do
     expect(entity.bar).to eq(1)
   end
 
-  describe "#token" do
-    context "when the type is :entity" do
-      it "raise an appropriate error" do
-        expect { entity.realize(:entity) }.to raise_error(NotImplementedError, "DummyCypherEntityClass must implement 'entity_token' method")
-      end
-    end
-
-    context "when the type is :variable" do
-      it "raise an appropriate error" do
-        expect { entity.realize(:variable) }.to raise_error(NotImplementedError, "DummyCypherEntityClass must implement 'variable_token' method")
-      end
+  describe ".variable_name" do
+    it "returns the correct name" do
+      expect(described_class.variable_name).to eq("cypher_record_entity")
     end
   end
 

@@ -12,6 +12,18 @@ RSpec.describe CypherRecord::Node do
 
   subject { DummyCypherRecordNodeClass.new(variable_name: :n, one: 1, two: "two") }
 
+  describe ".variable_name" do
+    it "returns the correct name" do
+      expect(described_class.variable_name).to eq("cypher_record_node")
+    end
+  end
+
+  describe ".variable_token" do
+    it "returns the default variable name" do
+      expect(described_class.variable_token).to eq("(cypher_record_node)")
+    end
+  end
+
   describe ".create" do
     it "creates the node with the default variable name" do
       expect(CypherRecord.engine).to receive(:query).with(
