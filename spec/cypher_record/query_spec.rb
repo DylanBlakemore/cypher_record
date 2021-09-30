@@ -137,4 +137,20 @@ RSpec.describe CypherRecord::Query do
       query.match(node).resolve
     end
   end
+
+  describe "#where" do
+    let(:query_string) { "WHERE query_dummy_node_class.foo = 'Foo 1' AND query_dummy_node_class.bar = 'Bar 1'" }
+
+    it "builds the correct query" do
+      expect(described_class.new(entity: QueryDummyNodeClass).where(foo: "Foo 1", bar: "Bar 1").realize).to eq(query_string)
+    end
+
+    context "with an optional entity" do
+      let(:query_string) { "WHERE n.foo = 'Foo 1' AND n.bar = 'Bar 1'" }
+
+      it "builds the correct query" do
+        expect(described_class.new.where(node, foo: "Foo 1", bar: "Bar 1").realize).to eq(query_string)
+      end
+    end
+  end
 end

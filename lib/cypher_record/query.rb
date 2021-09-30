@@ -8,6 +8,14 @@ module CypherRecord
       @base_entity = entity
     end
 
+    def where(entity=nil, **properties)
+      append("WHERE", entity) do |entity|
+        properties.map do |key, value|
+          CypherRecord::Format.property_assignment(entity.variable_name, key, value)
+        end.join(" AND ")
+      end
+    end
+
     def merge(entity=nil)
       append_entity("MERGE", entity)
     end
