@@ -16,10 +16,10 @@ RSpec.describe CypherRecord::Node do
 
   describe ".relationships" do
     let!(:expected_relationships) do
-      [
-        CypherRecord::RelationshipDefinition.new(CypherRecord::NodeExample, CypherRecord::RelationshipExample, CypherRecord::ChildNodeExample),
-        CypherRecord::RelationshipDefinition.new(CypherRecord::NodeExample, CypherRecord::MutualRelationshipExample, CypherRecord::NodeExample)
-      ]
+      {
+        child_node_examples: CypherRecord::RelationshipDefinition.new(CypherRecord::NodeExample, CypherRecord::RelationshipExample, CypherRecord::ChildNodeExample),
+        node_examples: CypherRecord::RelationshipDefinition.new(CypherRecord::NodeExample, CypherRecord::MutualRelationshipExample, CypherRecord::NodeExample)
+      }
     end
 
     it "returns the relationsip definitions for the class" do
