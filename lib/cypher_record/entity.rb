@@ -65,7 +65,7 @@ module CypherRecord
 
     def formatted_properties
       property_keys.map do |property_key|
-        "#{property_key}: #{CypherRecord::Formatter.format_property(properties[property_key])}" if properties[property_key]
+        "#{property_key}: #{CypherRecord::Format.property(properties[property_key])}" if properties[property_key]
       end.join(", ")
     end
 

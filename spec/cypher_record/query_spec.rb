@@ -106,6 +106,14 @@ RSpec.describe CypherRecord::Query do
         expect(base_query.return.realize).to eq(query_string)
       end
     end
+
+    context "with properties" do
+      let(:query_string) { "RETURN n.foo, n.bar" }
+
+      it "builds the correct query" do
+        expect(base_query.return(properties: [:foo, :bar]).realize).to eq(query_string)
+      end
+    end
   end
 
   describe "#set" do

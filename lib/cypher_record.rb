@@ -8,7 +8,7 @@ require_relative "cypher_record/version"
 
 # Helpers
 
-require_relative "cypher_record/formatter"
+require_relative "cypher_record/format"
 
 # Query Engine
 require_relative "cypher_record/engine"

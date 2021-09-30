@@ -20,7 +20,8 @@ module CypherRecord
       append_entity("MATCH", entity)
     end
 
-    def return(entity=nil)
+    def return(entity=nil, properties: nil)
+      return append_properties("RETURN", entity, properties) if properties
       append_variable("RETURN", entity)
     end
 
@@ -34,7 +35,7 @@ module CypherRecord
 
     def set(property, value, entity=nil)
       append("SET", entity) do |entity|
-        "#{entity.variable_name}.#{property} = #{CypherRecord::Formatter.format_property(value)}"
+        CypherRecord::Format.property_assignment(entity.variable_name, property, value)
       end
     end
 
@@ -51,6 +52,13 @@ module CypherRecord
     def append(operator, entity, &block)
       appended_value = yield (focus_entity(entity))
       append_to_query(operator, appended_value)
+    end
+
+    def append_properties(operator, entity, properties)
+      append_to_query(
+        operator,
+        CypherRecord::Format.property_keys(focus_entity(entity).variable_name, properties)
+      )
     end
 
     def append_variable(operator, entity)
