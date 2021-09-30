@@ -11,6 +11,14 @@ RSpec.describe CypherRecord::Entity do
 
   let(:entity) { klass.new(variable_name: :n, foo: "Foo", bar: 1) }
 
+  describe ".property_names" do
+    it { expect(klass.property_names).to eq([:foo, :bar]) }
+  end
+
+  describe "#properties" do
+    it { expect(entity.properties).to eq({foo: "Foo", bar: 1}) }
+  end
+
   it "assigns the correct instance variables" do
     expect(entity.foo).to eq("Foo")
     expect(entity.bar).to eq(1)

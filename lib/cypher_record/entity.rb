@@ -13,6 +13,10 @@ module CypherRecord
       alias_method :property, :attribute
     end
 
+    def self.property_names
+      self.attribute_names.map(&:to_sym)
+    end
+
     def self.tokenize_with(left, right)
       @left_tokenizer = left
       @right_tokenizer = right
