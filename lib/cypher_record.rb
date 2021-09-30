@@ -9,13 +9,15 @@ require_relative "cypher_record/version"
 
 # Helpers
 
-require_relative "cypher_record/format"
+require_relative "cypher_record/util/format"
+require_relative "cypher_record/util/class_resolver"
 
 # Query Engine
 require_relative "cypher_record/engine"
 require_relative "cypher_record/entity_adapter"
 
 # Models
+require_relative "cypher_record/relationship_definition"
 require_relative "cypher_record/entity"
 require_relative "cypher_record/node"
 require_relative "cypher_record/relationship"
@@ -33,6 +35,7 @@ module CypherRecord
   class Error < StandardError; end
   class AdapterError < StandardError; end
   class LabelError < StandardError; end
+  class EntityTypeError < StandardError; end
 
   def self.engine
     @engine ||= config.engine

@@ -2,6 +2,8 @@ require "spec_helper"
 
 RSpec.describe CypherRecord::Node do
 
+  class DummyCypherRecordRelationshipClass < CypherRecord::Relationship; end
+
   class DummyCypherRecordNodeClass < CypherRecord::Node
     property :one
     property :two
@@ -11,6 +13,19 @@ RSpec.describe CypherRecord::Node do
   end
 
   subject { DummyCypherRecordNodeClass.new(variable_name: :n, one: 1, two: "two") }
+
+  describe ".relationships" do
+    let!(:expected_relationships) do
+      [
+        CypherRecord::RelationshipDefinition.new(CypherRecord::NodeExample, CypherRecord::RelationshipExample, CypherRecord::ChildNodeExample),
+        CypherRecord::RelationshipDefinition.new(CypherRecord::NodeExample, CypherRecord::MutualRelationshipExample, CypherRecord::NodeExample)
+      ]
+    end
+
+    it "returns the relationsip definitions for the class" do
+      expect(CypherRecord::NodeExample.relationships).to eq(expected_relationships)
+    end
+  end
 
   describe ".variable_name" do
     it "returns the correct name" do
