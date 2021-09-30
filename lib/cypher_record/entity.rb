@@ -33,7 +33,11 @@ module CypherRecord
     ## Queries
 
     def self.all
-      CypherRecord::Query.new(entity: self).match.return
+      CypherRecord::Query.new(entity: self).match
+    end
+
+    def self.where(**props)
+      CypherRecord::Query.new(entity: self).where(**props)
     end
 
     ##

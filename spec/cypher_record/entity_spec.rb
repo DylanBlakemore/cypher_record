@@ -67,9 +67,16 @@ RSpec.describe CypherRecord::Entity do
   end
 
   describe ".all" do
-    it "resolves a query which returns all of the nodes with the crrect label" do
-      expect(CypherRecord::Entity.all.realize).to eq("MATCH cypher_record_entity:CypherRecord_Entity RETURN cypher_record_entity")
-      expect(DummyCypherEntityClass.all.realize).to eq("MATCH dummy_cypher_entity_class:DummyCypherEntityClass RETURN dummy_cypher_entity_class")
+    it "returns a query which returns all of the nodes with the correct label" do
+      expect(CypherRecord::Entity.all.realize).to eq("MATCH cypher_record_entity:CypherRecord_Entity")
+      expect(DummyCypherEntityClass.all.realize).to eq("MATCH dummy_cypher_entity_class:DummyCypherEntityClass")
+    end
+  end
+
+  describe ".where" do
+    it "returns the correct 'where' query" do
+      expect(CypherRecord::Entity.where(foo: "Foo").realize).to eq("WHERE cypher_record_entity.foo = 'Foo'")
+      expect(DummyCypherEntityClass.where(foo: "Foo").realize).to eq("WHERE dummy_cypher_entity_class.foo = 'Foo'")
     end
   end
 end

@@ -98,7 +98,13 @@ RSpec.describe CypherRecord::Node do
 
   describe ".all" do
     it "resolves a query which returns all of the nodes with the correct label" do
-      expect(CypherRecord::Node.all.realize).to eq("MATCH (cypher_record_node:CypherRecord_Node) RETURN cypher_record_node")
+      expect(CypherRecord::Node.all.realize).to eq("MATCH (cypher_record_node:CypherRecord_Node)")
+    end
+  end
+
+  describe ".where" do
+    it "resolves a query which returns all of the nodes with the correct label" do
+      expect(DummyCypherRecordNodeClass.where(foo: "Foo").realize).to eq("WHERE dummy_cypher_record_node_class.foo = 'Foo'")
     end
   end
 end
