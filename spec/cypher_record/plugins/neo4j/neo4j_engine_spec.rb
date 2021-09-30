@@ -4,7 +4,8 @@ RSpec.describe CypherRecord::Plugins::Neo4jEngine, type: :neo4j do
 
   before do
     class MockNodeClass < CypherRecord::Node
-      properties :foo, :bar
+      property :foo
+      property :bar
     end
   end
 

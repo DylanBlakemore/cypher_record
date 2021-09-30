@@ -1,13 +1,16 @@
 module CypherRecord
   class Entity
 
-    attr_reader :variable_name, :properties
+    include ActiveAttr::Attributes
+    include ActiveAttr::AttributeDefaults
+    include ActiveAttr::TypecastedAttributes
+    include ActiveAttr::MassAssignment
 
-    def self.properties(*props)
-      @properties = props
-      props.each do |prop|
-        attr_reader prop
-      end
+    attr_reader :variable_name
+
+    # Alias to ActiveAttr method
+    class << self
+      alias_method :property, :attribute
     end
 
     def self.label
@@ -16,10 +19,7 @@ module CypherRecord
 
     def initialize(variable_name: nil, **props)
       @variable_name = variable_name
-      @properties = props
-      property_keys.each do |key|
-        self.instance_variable_set("@#{key}", props[key])
-      end
+      super(**props)
     end
 
     def label
@@ -33,6 +33,10 @@ module CypherRecord
       when :variable
         variable_token
       end
+    end
+
+    def properties
+      attributes.symbolize_keys
     end
 
     private
@@ -64,13 +68,9 @@ module CypherRecord
     end
 
     def formatted_properties
-      property_keys.map do |property_key|
-        "#{property_key}: #{CypherRecord::Format.property(properties[property_key])}" if properties[property_key]
+      properties.map do |(property, value)|
+        "#{property}: #{CypherRecord::Format.property(value)}" if value
       end.join(", ")
-    end
-
-    def property_keys
-      @property_keys ||= self.class.instance_variable_get(:@properties) || []
     end
 
   end

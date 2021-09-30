@@ -3,7 +3,8 @@ require "spec_helper"
 RSpec.describe CypherRecord::Node do
 
   class DummyCypherRecordNodeClass < CypherRecord::Node
-    properties :one, :two
+    property :one
+    property :two
   end
 
   class CypherRecordNodeClassWithoutProperties < CypherRecord::Node

@@ -3,7 +3,8 @@ require "spec_helper"
 RSpec.describe CypherRecord::Relationship do
 
   class DummyCypherRecordEdgeClass < CypherRecord::Relationship
-    properties :one, :two
+    property :one
+    property :two
   end
 
   class CypherRecordEdgeClassWithoutProperties < CypherRecord::Relationship
@@ -13,11 +14,11 @@ RSpec.describe CypherRecord::Relationship do
 
   describe ".create" do
     class FooNode < CypherRecord::Node
-      properties :foo
+      property :foo
     end
 
     class BarEdge < CypherRecord::Relationship
-      properties :bar
+      property :bar
     end
 
     let(:left_node) { FooNode.new(variable_name: :foo_1, foo: "Foo 1") }

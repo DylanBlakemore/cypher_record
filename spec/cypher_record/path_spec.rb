@@ -5,11 +5,12 @@ RSpec.describe CypherRecord::Path do
   subject { described_class.from_node(initial, as: initial_type) }
 
   class RelationshipDummyNodeClass < CypherRecord::Node
-    properties :foo, :bar
+    property :foo
+    property :bar
   end
 
   class RelationshipDummyEdgeClass < CypherRecord::Relationship
-    properties :foobar
+    property :foobar
   end
 
   let(:initial_type) { :entity }

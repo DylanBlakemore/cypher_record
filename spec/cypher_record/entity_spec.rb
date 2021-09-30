@@ -3,7 +3,8 @@ require "spec_helper"
 RSpec.describe CypherRecord::Entity do
   
   class DummyCypherEntityClass < CypherRecord::Entity
-    properties :foo, :bar
+    property :foo
+    property :bar
   end
 
   let(:klass) { DummyCypherEntityClass }
@@ -37,7 +38,8 @@ RSpec.describe CypherRecord::Entity do
     context "with a namespaced class" do
       module Namespaced
         class DummyCypherEntityClass < CypherRecord::Entity
-          properties :foo, :bar
+          property :foo
+          property :bar
         end
       end
 

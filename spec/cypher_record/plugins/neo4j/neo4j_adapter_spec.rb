@@ -9,16 +9,19 @@ RSpec.describe CypherRecord::Plugins::Neo4jAdapter do
   before do
     module NamespacedNode
       class Neo4jNodeClass < CypherRecord::Node
-        properties :foo, :bar
+        property :foo
+        property :bar
       end
     end
 
     class Neo4jNodeClass < CypherRecord::Node
-      properties :foo, :bar
+      property :foo
+      property :bar
     end
 
     class Neo4jRelationshipClass < CypherRecord::Relationship
-      properties :foo, :bar
+      property :foo
+      property :bar
     end
   end
   

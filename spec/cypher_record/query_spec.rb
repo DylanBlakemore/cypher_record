@@ -3,7 +3,8 @@ require "spec_helper"
 RSpec.describe CypherRecord::Query do
 
   class QueryDummyNodeClass < CypherRecord::Node
-    properties :foo, :bar
+    property :foo
+    property :bar
   end
 
   let(:node) { QueryDummyNodeClass.new(variable_name: :n, foo: "foo", bar: "bar") }
