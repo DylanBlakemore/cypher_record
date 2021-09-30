@@ -25,7 +25,7 @@ module CypherRecord
 
       def self.adapt_entity(key, record, label)
         if entity_class = resolve_label(label).safe_constantize
-          entity_class.new(variable_name: key, **record.properties)
+          entity_class.new(id: record.id, variable_name: key, **record.properties)
         else
           raise(CypherRecord::LabelError, "Model for label #{label} does not exist")
         end

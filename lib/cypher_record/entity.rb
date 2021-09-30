@@ -6,7 +6,7 @@ module CypherRecord
     include ActiveAttr::TypecastedAttributes
     include ActiveAttr::MassAssignment
 
-    attr_reader :variable_name
+    attr_reader :variable_name, :id
 
     # Alias to ActiveAttr method
     class << self
@@ -38,8 +38,9 @@ module CypherRecord
 
     ##
 
-    def initialize(variable_name: nil, **props)
-      @variable_name = variable_name
+    def initialize(id: nil, variable_name: nil, **props)
+      @variable_name = [variable_name, id&.to_s].compact.join("_").to_sym
+      @id = id
       super(**props)
     end
 

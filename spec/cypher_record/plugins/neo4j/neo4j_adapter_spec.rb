@@ -31,7 +31,7 @@ RSpec.describe CypherRecord::Plugins::Neo4jAdapter do
         let(:keys) { [:foo] }
         let(:values) do
           [
-            Neo4j::Driver::Types::Node.new(:foo, ["MissingNodeClass"], {foo: "Foo", bar: "Bar"})
+            Neo4j::Driver::Types::Node.new(123, ["MissingNodeClass"], {foo: "Foo", bar: "Bar"})
           ]
         end
 
@@ -44,7 +44,7 @@ RSpec.describe CypherRecord::Plugins::Neo4jAdapter do
         let(:keys) { [:foo] }
         let(:values) do
           [
-            Neo4j::Driver::Types::Node.new(:foo, ["NamespacedNode_Neo4jNodeClass"], {foo: "Foo", bar: "Bar"})
+            Neo4j::Driver::Types::Node.new(123, ["NamespacedNode_Neo4jNodeClass"], {foo: "Foo", bar: "Bar"})
           ]
         end
 
@@ -57,7 +57,7 @@ RSpec.describe CypherRecord::Plugins::Neo4jAdapter do
         let(:keys) { [:foo] }
         let(:values) do
           [
-            Neo4j::Driver::Types::Node.new(:foo, ["Neo4jNodeClass"], {foo: "Foo", bar: "Bar"})
+            Neo4j::Driver::Types::Node.new(123, ["Neo4jNodeClass"], {foo: "Foo", bar: "Bar"})
           ]
         end
 
@@ -70,7 +70,7 @@ RSpec.describe CypherRecord::Plugins::Neo4jAdapter do
         end
 
         it "assigns the correct variable name" do
-          expect(described_class.adapt(result).variable_name).to eq(:foo)
+          expect(described_class.adapt(result).variable_name).to eq(:foo_123)
         end
       end
 
@@ -78,7 +78,7 @@ RSpec.describe CypherRecord::Plugins::Neo4jAdapter do
         let(:keys) { [:foo] }
         let(:values) do
           [
-            Neo4j::Driver::Types::Relationship.new(:foo, 1, 2, "Neo4jRelationshipClass", {foo: "Foo", bar: "Bar"})
+            Neo4j::Driver::Types::Relationship.new(123, 1, 2, "Neo4jRelationshipClass", {foo: "Foo", bar: "Bar"})
           ]
         end
 
@@ -91,7 +91,7 @@ RSpec.describe CypherRecord::Plugins::Neo4jAdapter do
         end
 
         it "assigns the correct variable name" do
-          expect(described_class.adapt(result).variable_name).to eq(:foo)
+          expect(described_class.adapt(result).variable_name).to eq(:foo_123)
         end
       end
 
@@ -109,8 +109,8 @@ RSpec.describe CypherRecord::Plugins::Neo4jAdapter do
       let(:keys) { [:node_key, :rel_key] }
       let(:values) do
         [
-          Neo4j::Driver::Types::Node.new(:foo, ["Neo4jNodeClass"], {foo: "Node foo", bar: "Node bar"}),
-          Neo4j::Driver::Types::Relationship.new(:bar, 1, 2, "Neo4jRelationshipClass", {foo: "Rel foo", bar: "Rel bar"})
+          Neo4j::Driver::Types::Node.new(123, ["Neo4jNodeClass"], {foo: "Node foo", bar: "Node bar"}),
+          Neo4j::Driver::Types::Relationship.new(456, 1, 2, "Neo4jRelationshipClass", {foo: "Rel foo", bar: "Rel bar"})
         ]
       end
 
@@ -123,7 +123,7 @@ RSpec.describe CypherRecord::Plugins::Neo4jAdapter do
       end
 
       it "returns the correct variable names" do
-        expect(described_class.adapt(result).map(&:variable_name)).to eq([:node_key, :rel_key])
+        expect(described_class.adapt(result).map(&:variable_name)).to eq([:node_key_123, :rel_key_456])
       end
     end
   end
