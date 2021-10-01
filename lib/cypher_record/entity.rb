@@ -37,7 +37,11 @@ module CypherRecord
     end
 
     def self.where(**props)
-      CypherRecord::Query.new(entity: self).where(**props)
+      all.where(**props)
+    end
+
+    def self.find(id)
+      all.where(id: id).return.limit(1).resolve
     end
 
     ##

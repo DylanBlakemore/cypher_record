@@ -75,8 +75,15 @@ RSpec.describe CypherRecord::Entity do
 
   describe ".where" do
     it "returns the correct 'where' query" do
-      expect(CypherRecord::Entity.where(foo: "Foo").realize).to eq("WHERE cypher_record_entity.foo = 'Foo'")
-      expect(DummyCypherEntityClass.where(foo: "Foo").realize).to eq("WHERE dummy_cypher_entity_class.foo = 'Foo'")
+      expect(CypherRecord::Entity.where(foo: "Foo").realize).to eq("MATCH cypher_record_entity:CypherRecord_Entity WHERE cypher_record_entity.foo = 'Foo'")
+      expect(DummyCypherEntityClass.where(foo: "Foo").realize).to eq("MATCH dummy_cypher_entity_class:DummyCypherEntityClass WHERE dummy_cypher_entity_class.foo = 'Foo'")
+    end
+  end
+
+  describe ".find" do
+    it "creates the query to find the first entry vy ID" do
+      expect(CypherRecord.engine).to receive(:query).with("MATCH cypher_record_entity:CypherRecord_Entity WHERE ID(cypher_record_entity) = 1234 RETURN cypher_record_entity LIMIT 1")
+      CypherRecord::Entity.find(1234)
     end
   end
 end
