@@ -41,12 +41,12 @@ module CypherRecord
     end
 
     def self.find(id)
-      all.where(id: id).return.limit(1).resolve
+      all.where(id: id).return.limit(1).resolve&.first
     end
 
     ##
 
-    def initialize(id: nil, variable_name: nil, **props)
+    def initialize(id: nil, variable_name: self.class.variable_name, **props)
       @variable_name = [variable_name, id&.to_s].compact.join("_").to_sym
       @id = id
       super(**props)

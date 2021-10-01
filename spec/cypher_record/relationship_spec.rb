@@ -65,12 +65,12 @@ RSpec.describe CypherRecord::Relationship do
       )
     end
 
-    context "when an id is not defined" do
+    context "when a variable name is not defined" do
       subject { DummyCypherRecordEdgeClass.new(one: 1, two: "two") }
 
-      it "does not include the variable name in the string" do
+      it "uses the defaut" do
         expect(subject.realize).to eq(
-          "[:DummyCypherRecordEdgeClass {one: 1, two: 'two'}]"
+          "[dummy_cypher_record_edge_class:DummyCypherRecordEdgeClass {one: 1, two: 'two'}]"
         )
       end
     end
@@ -99,9 +99,12 @@ RSpec.describe CypherRecord::Relationship do
   end
 
   describe ".find" do
-    it "resolves the query to find the node with the matching ID" do
-      expect(CypherRecord.engine).to receive(:query).with("MATCH [dummy_cypher_record_edge_class:DummyCypherRecordEdgeClass] WHERE ID(dummy_cypher_record_edge_class) = 1234 RETURN dummy_cypher_record_edge_class LIMIT 1")
-      DummyCypherRecordEdgeClass.find(1234)
+    let(:query_string) { "MATCH [dummy_cypher_record_edge_class:DummyCypherRecordEdgeClass] WHERE ID(dummy_cypher_record_edge_class) = 1234 RETURN dummy_cypher_record_edge_class LIMIT 1" }
+    let(:relationship) { DummyCypherRecordEdgeClass.new(id: 1234, one: 1, two: "two") }
+
+    it "resolves the query to find the relationship with the matching ID" do
+      expect(CypherRecord.engine).to receive(:query).with(query_string).and_return([relationship])
+      expect(DummyCypherRecordEdgeClass.find(1234)).to eq(relationship)
     end
   end
 end

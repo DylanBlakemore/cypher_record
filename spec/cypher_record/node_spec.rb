@@ -69,12 +69,12 @@ RSpec.describe CypherRecord::Node do
       )
     end
 
-    context "when an id is not defined" do
+    context "when a variable name is not defined" do
       subject { DummyCypherRecordNodeClass.new(one: 1, two: "two") }
 
-      it "does not include the variable name in the string" do
+      it "uses the default" do
         expect(subject.realize).to eq(
-          "(:DummyCypherRecordNodeClass {one: 1, two: 'two'})"
+          "(dummy_cypher_record_node_class:DummyCypherRecordNodeClass {one: 1, two: 'two'})"
         )
       end
     end
@@ -109,9 +109,12 @@ RSpec.describe CypherRecord::Node do
   end
 
   describe ".find" do
+    let(:query_string) { "MATCH (dummy_cypher_record_node_class:DummyCypherRecordNodeClass) WHERE ID(dummy_cypher_record_node_class) = 1234 RETURN dummy_cypher_record_node_class LIMIT 1" }
+    let(:node) { DummyCypherRecordNodeClass.new(id: 1234, one: 1, two: "two") }
+
     it "resolves the query to find the node with the matching ID" do
-      expect(CypherRecord.engine).to receive(:query).with("MATCH (dummy_cypher_record_node_class:DummyCypherRecordNodeClass) WHERE ID(dummy_cypher_record_node_class) = 1234 RETURN dummy_cypher_record_node_class LIMIT 1")
-      DummyCypherRecordNodeClass.find(1234)
+      expect(CypherRecord.engine).to receive(:query).with(query_string).and_return([node])
+      expect(DummyCypherRecordNodeClass.find(1234)).to eq(node)
     end
   end
 end
