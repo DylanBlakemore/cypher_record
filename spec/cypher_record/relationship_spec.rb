@@ -97,4 +97,11 @@ RSpec.describe CypherRecord::Relationship do
       expect(DummyCypherRecordEdgeClass.where(foo: "Foo").realize).to eq("MATCH [dummy_cypher_record_edge_class:DummyCypherRecordEdgeClass] WHERE dummy_cypher_record_edge_class.foo = 'Foo'")
     end
   end
+
+  describe ".find" do
+    it "resolves the query to find the node with the matching ID" do
+      expect(CypherRecord.engine).to receive(:query).with("MATCH [dummy_cypher_record_edge_class:DummyCypherRecordEdgeClass] WHERE ID(dummy_cypher_record_edge_class) = 1234 RETURN dummy_cypher_record_edge_class LIMIT 1")
+      DummyCypherRecordEdgeClass.find(1234)
+    end
+  end
 end
