@@ -8,6 +8,10 @@ module CypherRecord
       @base_entity = entity
     end
 
+    def limit(n)
+      append_value("LIMIT", n)
+    end
+
     def where(entity=nil, **properties)
       append("WHERE", entity) do |entity|
         properties.map do |key, value|
@@ -56,6 +60,10 @@ module CypherRecord
     end
 
     private
+
+    def append_value(operator, value)
+      append_to_query(operator, CypherRecord::Format.property(value))
+    end
 
     def append(operator, entity, &block)
       appended_value = yield (focus_entity(entity))
