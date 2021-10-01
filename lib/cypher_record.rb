@@ -25,6 +25,9 @@ require_relative "cypher_record/path"
 
 # Querying
 require_relative "cypher_record/token"
+require_relative "cypher_record/query_methods/base"
+require_relative "cypher_record/query_methods/filtering"
+require_relative "cypher_record/query_methods/writing"
 require_relative "cypher_record/query"
 
 # Backend adapters
