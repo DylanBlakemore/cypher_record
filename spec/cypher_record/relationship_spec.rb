@@ -33,12 +33,12 @@ RSpec.describe CypherRecord::Relationship do
       property :bar
     end
 
-    let(:left_node) { FooNode.new(variable_name: :foo_1, foo: "Foo 1") }
-    let(:right_node) { FooNode.new(variable_name: :foo_2, foo: "Foo 2") }
+    let(:left_node) { FooNode.new(id: 1, variable_name: :foo, foo: "Foo 1") }
+    let(:right_node) { FooNode.new(id: 2, variable_name: :foo, foo: "Foo 2") }
 
     it "correctly formats the query" do
       expect(CypherRecord.engine).to receive(:query).with(
-        "MATCH (foo_1:FooNode {foo: 'Foo 1'}) MATCH (foo_2:FooNode {foo: 'Foo 2'}) CREATE (foo_1) - [bar_edge:BarEdge {bar: 'Bar'}] -> (foo_2) RETURN bar_edge"
+        "MATCH (foo_1:FooNode {foo: 'Foo 1'}) MATCH (foo_2:FooNode {foo: 'Foo 2'}) CREATE (foo_1)-[bar_edge:BarEdge {bar: 'Bar'}]->(foo_2) RETURN bar_edge"
       )
       BarEdge.create(left_node, right_node, bar: "Bar")
     end

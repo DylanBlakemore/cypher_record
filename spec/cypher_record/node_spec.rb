@@ -17,13 +17,32 @@ RSpec.describe CypherRecord::Node do
   describe ".relationships" do
     let!(:expected_relationships) do
       {
-        child_node_examples: CypherRecord::RelationshipDefinition.new(CypherRecord::NodeExample, CypherRecord::RelationshipExample, CypherRecord::ChildNodeExample),
-        node_examples: CypherRecord::RelationshipDefinition.new(CypherRecord::NodeExample, CypherRecord::MutualRelationshipExample, CypherRecord::NodeExample)
+        child_node_examples: CypherRecord::Path[CypherRecord::RelationshipExample].to(CypherRecord::ChildNodeExample),
+        node_examples: CypherRecord::Path[CypherRecord::MutualRelationshipExample].to(CypherRecord::NodeExample)
       }
     end
 
-    it "returns the relationsip definitions for the class" do
+    it "returns the relationship definitions for the class" do
       expect(CypherRecord::NodeExample.relationships).to eq(expected_relationships)
+    end
+  end
+
+  describe "relationship queries" do
+    let(:parent_node) { CypherRecord::NodeExample.new(id: 123, title: "Foo", description: "Bar") }
+    let(:query_string) do
+      "MATCH (cypher_record_node_example_123:CypherRecord_NodeExample {title: 'Foo', description: 'Bar'})"\
+      "-[cypher_record_relationship_example:CypherRecord_RelationshipExample]"\
+      "->(cypher_record_child_node_example:CypherRecord_ChildNodeExample) "\
+      "WHERE ID(cypher_record_node_example_123) = 123"
+    end
+
+    let(:return_query_string) do
+      query_string.concat(" RETURN cypher_record_child_node_example")
+    end
+
+    it "creates a query for the related nodes" do
+      expect(parent_node.child_node_examples.realize).to eq(query_string)
+      expect(parent_node.child_node_examples.return.realize).to eq(return_query_string)
     end
   end
 

@@ -17,7 +17,6 @@ require_relative "cypher_record/engine"
 require_relative "cypher_record/entity_adapter"
 
 # Models
-require_relative "cypher_record/relationship_definition"
 require_relative "cypher_record/entity"
 require_relative "cypher_record/node"
 require_relative "cypher_record/relationship"

@@ -81,23 +81,23 @@ module CypherRecord
     private
 
     def self.entity_token
-      build_token(left_tokenizer, base_entity_token, right_tokenizer)
+      build_token(base_entity_token)
     end
 
     def self.variable_token
-      build_token(left_tokenizer, variable_name, right_tokenizer)
+      build_token(variable_name)
     end
 
     def entity_token
-      self.class.build_token(left_tokenizer, base_entity_token, right_tokenizer)
+      self.class.build_token(base_entity_token)
     end
 
     def variable_token
-      self.class.build_token(left_tokenizer, variable_name, right_tokenizer)
+      self.class.build_token(variable_name)
     end
 
-    def self.build_token(left, middle, right)
-      "#{left}#{middle}#{right}"
+    def self.build_token(middle)
+      "#{left_tokenizer}#{middle}#{right_tokenizer}"
     end
 
     def self.build_entity_token_base(variable_name, label, property_string=nil)
@@ -140,14 +140,6 @@ module CypherRecord
       rescue NoMethodError
         nil
       end
-    end
-
-    def left_tokenizer
-      @left_tokenizer ||= self.class.left_tokenizer
-    end
-
-    def right_tokenizer
-      @right_tokenizer ||= self.class.right_tokenizer
     end
 
   end

@@ -17,6 +17,18 @@ module CypherRecord
       @relationships ||= {}
     end
 
+    def method_missing(method_name, *args, **kwargs, &block)
+      if path = self.class.relationships[method_name]
+        CypherRecord::Query.new(entity: path.child).match(path.from(self)).where(self, id: self.id)
+      else
+        super
+      end
+    end
+  
+    def respond_to?(method_name, include_private = false)
+      super || !self.class.relationships[method_name].nil?
+    end
+
     private
 
     def self.singularize(key)
@@ -24,11 +36,7 @@ module CypherRecord
     end
 
     def self.create_relationship_definition(node, relation)
-      CypherRecord::RelationshipDefinition.new(
-        self,
-        resolve_key(relation),
-        resolve_key(node)
-      )
+      CypherRecord::Path[resolve_key(relation)].to(resolve_key(node))
     end
 
     def self.resolve_key(key)
