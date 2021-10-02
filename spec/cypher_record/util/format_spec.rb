@@ -32,11 +32,5 @@ RSpec.describe CypherRecord::Format do
     it "returns the correct string" do
       expect(described_class.property_assignment(:n, :foo, "Foo 1")).to eq("n.foo = 'Foo 1'")
     end
-
-    context "for the :id property" do
-      it "returns the correct string" do
-        expect(described_class.property_assignment(:n, :id, 1234)).to eq("ID(n) = 1234")
-      end
-    end
   end
 end

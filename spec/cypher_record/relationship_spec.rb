@@ -22,7 +22,7 @@ RSpec.describe CypherRecord::Relationship do
 
     it "correctly formats the query" do
       expect(CypherRecord.engine).to receive(:query).with(
-        "MERGE (n_1:CypherRecord_NodeExample {foo: 'Foo 1'}) MERGE (n_2:CypherRecord_NodeExample {foo: 'Foo 2'}) MERGE (n_1)-[cypher_record_relationship_example:CypherRecord_RelationshipExample {bar: 'Bar'}]->(n_2) RETURN cypher_record_relationship_example"
+        "MERGE (n_1:CypherRecord_NodeExample {foo: 'Foo 1', id: 1}) MERGE (n_2:CypherRecord_NodeExample {foo: 'Foo 2', id: 2}) MERGE (n_1)-[cypher_record_relationship_example:CypherRecord_RelationshipExample {bar: 'Bar'}]->(n_2) RETURN cypher_record_relationship_example"
       )
       CypherRecord::RelationshipExample.create(left_node, right_node, bar: "Bar")
     end
@@ -83,7 +83,7 @@ RSpec.describe CypherRecord::Relationship do
   end
 
   describe ".find" do
-    let(:query_string) { "MATCH [cypher_record_relationship_example:CypherRecord_RelationshipExample] WHERE ID(cypher_record_relationship_example) = 1234 RETURN cypher_record_relationship_example LIMIT 1" }
+    let(:query_string) { "MATCH [cypher_record_relationship_example_1234:CypherRecord_RelationshipExample {id: 1234}] RETURN cypher_record_relationship_example_1234 LIMIT 1" }
     let(:relationship) { CypherRecord::RelationshipExample.new(id: 1234, foo: 1, bar: "two") }
 
     it "resolves the query to find the relationship with the matching ID" do

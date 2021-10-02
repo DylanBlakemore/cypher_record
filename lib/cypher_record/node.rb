@@ -22,7 +22,7 @@ module CypherRecord
 
     def method_missing(method_name, *args, **kwargs, &block)
       if path = self.class.relationships[method_name]
-        CypherRecord::Query.new(entity: path.child).match(path.from(self)).where(self, id: self.id)
+        CypherRecord::Query.new(entity: path.child).match(path.from(self))
       else
         super
       end

@@ -3,6 +3,7 @@ module CypherRecord
 
     property :foo
     property :bar
+    primary_key :id
 
   end
 end

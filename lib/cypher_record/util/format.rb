@@ -21,11 +21,7 @@ module CypherRecord
     end
 
     def self.property_assignment(variable_name, property, value)
-      if property == :id # This is a special case. ID is handled through a function rather than a true property
-        "ID(#{variable_name}) = #{value}"
-      else
-        "#{entity_property(variable_name, property)} = #{property(value)}"
-      end
+      "#{entity_property(variable_name, property)} = #{property(value)}"
     end
 
     private

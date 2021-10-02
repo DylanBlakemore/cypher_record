@@ -20,10 +20,9 @@ RSpec.describe CypherRecord::Node do
   describe "relationship queries" do
     let(:parent_node) { CypherRecord::NodeExample.new(id: 123, foo: "Foo", bar: "Bar") }
     let(:query_string) do
-      "MATCH (cypher_record_node_example_123:CypherRecord_NodeExample {foo: 'Foo', bar: 'Bar'})"\
+      "MATCH (cypher_record_node_example_123:CypherRecord_NodeExample {foo: 'Foo', bar: 'Bar', id: 123})"\
       "-[cypher_record_relationship_example:CypherRecord_RelationshipExample]"\
-      "->(cypher_record_child_node_example:CypherRecord_ChildNodeExample) "\
-      "WHERE ID(cypher_record_node_example_123) = 123"
+      "->(cypher_record_child_node_example:CypherRecord_ChildNodeExample)"
     end
 
     let(:return_query_string) do
@@ -127,7 +126,7 @@ RSpec.describe CypherRecord::Node do
   end
 
   describe ".find" do
-    let(:query_string) { "MATCH (cypher_record_node_example:CypherRecord_NodeExample) WHERE ID(cypher_record_node_example) = 1234 RETURN cypher_record_node_example LIMIT 1" }
+    let(:query_string) { "MATCH (cypher_record_node_example_1234:CypherRecord_NodeExample {id: 1234}) RETURN cypher_record_node_example_1234 LIMIT 1" }
     let(:node) { CypherRecord::NodeExample.new(id: 1234, one: 1, two: "two") }
 
     it "resolves the query to find the node with the matching ID" do
@@ -160,8 +159,8 @@ RSpec.describe CypherRecord::Node do
 
   describe "#add_relation" do
     let(:query_string) do
-      "MERGE (cypher_record_node_example_123:CypherRecord_NodeExample {foo: 'Foo', bar: 'Bar'}) "\
-      "MERGE (cypher_record_node_example_456:CypherRecord_NodeExample {foo: 'Foo 2', bar: 'Bar 2'}) "\
+      "MERGE (cypher_record_node_example_123:CypherRecord_NodeExample {foo: 'Foo', bar: 'Bar', id: 123}) "\
+      "MERGE (cypher_record_node_example_456:CypherRecord_NodeExample {foo: 'Foo 2', bar: 'Bar 2', id: 456}) "\
       "MERGE (cypher_record_node_example_123)-[cypher_record_mutual_relationship_example:CypherRecord_MutualRelationshipExample]->(cypher_record_node_example_456) "\
       "RETURN cypher_record_mutual_relationship_example"
     end

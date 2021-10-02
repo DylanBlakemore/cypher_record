@@ -147,14 +147,6 @@ RSpec.describe CypherRecord::Query do
         expect(described_class.new.where(node, foo: "Foo 1", bar: "Bar 1").realize).to eq(query_string)
       end
     end
-
-    context "where one of the properties is the ID" do
-      let(:query_string) { "WHERE ID(n) = 1234 AND n.foo = 'Foo 1' AND n.bar = 'Bar 1'" }
-
-      it "uses the ID function" do
-        expect(described_class.new.where(node, id: 1234, foo: "Foo 1", bar: "Bar 1").realize).to eq(query_string)
-      end
-    end
   end
 
   describe "#limit" do

@@ -12,7 +12,7 @@ RSpec.describe CypherRecord::Plugins::Neo4jAdapter do
         let(:keys) { [:foo] }
         let(:values) do
           [
-            Neo4j::Driver::Types::Node.new(123, ["MissingNodeClass"], {foo: "Foo", bar: "Bar"})
+            Neo4j::Driver::Types::Node.new(123, ["MissingNodeClass"], {foo: "Foo", bar: "Bar", id: 123})
           ]
         end
 
@@ -25,7 +25,7 @@ RSpec.describe CypherRecord::Plugins::Neo4jAdapter do
         let(:keys) { [:foo] }
         let(:values) do
           [
-            Neo4j::Driver::Types::Node.new(123, ["CypherRecord_NodeExample"], {foo: "Foo", bar: "Bar"})
+            Neo4j::Driver::Types::Node.new(123, ["CypherRecord_NodeExample"], {foo: "Foo", bar: "Bar", id: 123})
           ]
         end
 
@@ -34,7 +34,7 @@ RSpec.describe CypherRecord::Plugins::Neo4jAdapter do
         end
 
         it "creates the correct properties" do
-          expect(described_class.adapt(result).properties).to eq({foo: "Foo", bar: "Bar"})
+          expect(described_class.adapt(result).properties).to eq({foo: "Foo", bar: "Bar", id: 123})
         end
 
         it "assigns the correct variable name" do
@@ -46,7 +46,7 @@ RSpec.describe CypherRecord::Plugins::Neo4jAdapter do
         let(:keys) { [:foo] }
         let(:values) do
           [
-            Neo4j::Driver::Types::Relationship.new(123, 1, 2, "CypherRecord_RelationshipExample", {foo: "Foo", bar: "Bar"})
+            Neo4j::Driver::Types::Relationship.new(123, 1, 2, "CypherRecord_RelationshipExample", {foo: "Foo", bar: "Bar", id: 123})
           ]
         end
 
@@ -55,7 +55,7 @@ RSpec.describe CypherRecord::Plugins::Neo4jAdapter do
         end
 
         it "creates the correct properties" do
-          expect(described_class.adapt(result).properties).to eq({foo: "Foo", bar: "Bar"})
+          expect(described_class.adapt(result).properties).to eq({foo: "Foo", bar: "Bar", id: 123})
         end
 
         it "assigns the correct variable name" do
@@ -77,8 +77,8 @@ RSpec.describe CypherRecord::Plugins::Neo4jAdapter do
       let(:keys) { [:node_key, :rel_key] }
       let(:values) do
         [
-          Neo4j::Driver::Types::Node.new(123, ["CypherRecord_NodeExample"], {foo: "Node foo", bar: "Node bar"}),
-          Neo4j::Driver::Types::Relationship.new(456, 1, 2, "CypherRecord_RelationshipExample", {foo: "Rel foo", bar: "Rel bar"})
+          Neo4j::Driver::Types::Node.new(123, ["CypherRecord_NodeExample"], {foo: "Node foo", bar: "Node bar", id: 123}),
+          Neo4j::Driver::Types::Relationship.new(456, 1, 2, "CypherRecord_RelationshipExample", {foo: "Rel foo", bar: "Rel bar", id: 456})
         ]
       end
 
@@ -87,7 +87,7 @@ RSpec.describe CypherRecord::Plugins::Neo4jAdapter do
       end
 
       it "returns the correct properties" do
-        expect(described_class.adapt(result).map(&:properties)).to eq([{foo: "Node foo", bar: "Node bar"}, {foo: "Rel foo", bar: "Rel bar"}])
+        expect(described_class.adapt(result).map(&:properties)).to eq([{foo: "Node foo", bar: "Node bar", id: 123}, {foo: "Rel foo", bar: "Rel bar", id: 456}])
       end
 
       it "returns the correct variable names" do

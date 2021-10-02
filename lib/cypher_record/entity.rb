@@ -6,14 +6,15 @@ module CypherRecord
     include ActiveAttr::TypecastedAttributes
     include ActiveAttr::MassAssignment
 
-    attr_reader :variable_name, :id
+    attr_reader :variable_name
 
     # Alias to ActiveAttr method
     class << self
       alias_method :property, :attribute
     end
 
-    def self.primary_key(key)
+    def self.primary_key(key, *args, **kwargs)
+      property(key, *args, **kwargs)
       @primary_key = key
     end
 
@@ -44,8 +45,9 @@ module CypherRecord
       all.where(**props)
     end
 
-    def self.find(id)
-      all.where(id: id).return.limit(1).resolve&.first
+    def self.find(primary_key_value)
+      raise(NotImplementedError, "Entity#find is only available for models that define a primary key") unless @primary_key
+      find_by(@primary_key => primary_key_value)
     end
 
     def self.find_by(**props)
@@ -54,9 +56,8 @@ module CypherRecord
 
     ##
 
-    def initialize(id: nil, variable_name: self.class.variable_name, **props)
-      @variable_name = [variable_name, id&.to_s].compact.join("_").to_sym
-      @id = id
+    def initialize(variable_name: self.class.variable_name, **props)
+      @variable_name = self.class.generate_variable_name(variable_name, props)
       super(**props)
     end
 
@@ -91,6 +92,12 @@ module CypherRecord
     end
 
     private
+
+    def self.generate_variable_name(base_variable_name, props)
+      name = [base_variable_name]
+      name << props[@primary_key] if @primary_key
+      name.compact.join("_").to_sym
+    end
 
     def self.entity_token
       build_token(base_entity_token)

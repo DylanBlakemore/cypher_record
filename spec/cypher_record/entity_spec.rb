@@ -11,19 +11,20 @@ RSpec.describe CypherRecord::Entity do
 
   let(:klass) { DummyCypherEntityClass }
 
-  let(:entity) { klass.new(variable_name: :n, foo: "Foo", bar: 1) }
+  let(:entity) { klass.new(variable_name: :n, id: 123, foo: "Foo", bar: 1) }
 
   describe ".property_names" do
-    it { expect(klass.property_names).to eq([:foo, :bar]) }
+    it { expect(klass.property_names).to eq([:foo, :bar, :id]) }
   end
 
   describe "#properties" do
-    it { expect(entity.properties).to eq({foo: "Foo", bar: 1}) }
+    it { expect(entity.properties).to eq({foo: "Foo", bar: 1, id: 123}) }
   end
 
   describe "#primary_key" do
     it "can define a primary key" do
       expect(entity.primary_key).to eq(:id)
+      expect(entity.id).to eq(123)
     end
   end
 
@@ -89,9 +90,15 @@ RSpec.describe CypherRecord::Entity do
   end
 
   describe ".find" do
-    it "creates the query to find the first entry vy ID" do
-      expect(CypherRecord.engine).to receive(:query).with("MATCH cypher_record_entity:CypherRecord_Entity WHERE ID(cypher_record_entity) = 1234 RETURN cypher_record_entity LIMIT 1")
-      CypherRecord::Entity.find(1234)
+    it "creates the query to find the first entry by the primary key" do
+      expect(CypherRecord.engine).to receive(:query).with("MATCH dummy_cypher_entity_class_1234:DummyCypherEntityClass {id: 1234} RETURN dummy_cypher_entity_class_1234 LIMIT 1")
+      DummyCypherEntityClass.find(1234)
+    end
+
+    context "when a primary key is not defined for the model" do
+      it "returns an appropriate error" do
+        expect { CypherRecord::Entity.find(1234) }.to raise_error(NotImplementedError, "Entity#find is only available for models that define a primary key")
+      end
     end
   end
 
