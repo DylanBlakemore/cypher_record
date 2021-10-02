@@ -26,7 +26,7 @@ module CypherRecord
     end
   
     def respond_to?(method_name, include_private = false)
-      super || !self.class.relationships[method_name].nil?
+      super || self.class.relationships[method_name].present?
     end
 
     private
