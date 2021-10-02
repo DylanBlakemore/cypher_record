@@ -2,15 +2,7 @@ require "spec_helper"
 
 RSpec.describe CypherRecord::Relationship do
 
-  class DummyCypherRecordEdgeClass < CypherRecord::Relationship
-    property :one
-    property :two
-  end
-
-  class CypherRecordEdgeClassWithoutProperties < CypherRecord::Relationship
-  end
-
-  subject { DummyCypherRecordEdgeClass.new(variable_name: :n, one: 1, two: "two") }
+  subject { CypherRecord::RelationshipExample.new(variable_name: :n, foo: 1, bar: "two") }
 
   describe ".variable_name" do
     it "returns the correct name" do
@@ -25,35 +17,27 @@ RSpec.describe CypherRecord::Relationship do
   end
 
   describe ".create" do
-    class FooNode < CypherRecord::Node
-      property :foo
-    end
-
-    class BarEdge < CypherRecord::Relationship
-      property :bar
-    end
-
-    let(:left_node) { FooNode.new(id: 1, variable_name: :foo, foo: "Foo 1") }
-    let(:right_node) { FooNode.new(id: 2, variable_name: :foo, foo: "Foo 2") }
+    let(:left_node) { CypherRecord::NodeExample.new(id: 1, variable_name: :n, foo: "Foo 1") }
+    let(:right_node) { CypherRecord::NodeExample.new(id: 2, variable_name: :n, foo: "Foo 2") }
 
     it "correctly formats the query" do
       expect(CypherRecord.engine).to receive(:query).with(
-        "MATCH (foo_1:FooNode {foo: 'Foo 1'}) MATCH (foo_2:FooNode {foo: 'Foo 2'}) CREATE (foo_1)-[bar_edge:BarEdge {bar: 'Bar'}]->(foo_2) RETURN bar_edge"
+        "MATCH (n_1:CypherRecord_NodeExample {foo: 'Foo 1'}) MATCH (n_2:CypherRecord_NodeExample {foo: 'Foo 2'}) CREATE (n_1)-[cypher_record_relationship_example:CypherRecord_RelationshipExample {bar: 'Bar'}]->(n_2) RETURN cypher_record_relationship_example"
       )
-      BarEdge.create(left_node, right_node, bar: "Bar")
+      CypherRecord::RelationshipExample.create(left_node, right_node, bar: "Bar")
     end
   end
 
   describe ".realize" do
     it "correctly formats the node" do
-      expect(DummyCypherRecordEdgeClass.realize).to eq(
-        "[dummy_cypher_record_edge_class:DummyCypherRecordEdgeClass]"
+      expect(CypherRecord::RelationshipExample.realize).to eq(
+        "[cypher_record_relationship_example:CypherRecord_RelationshipExample]"
       )
     end
 
     context "when the variable token is requested" do
       it "correctly formats the node" do
-        expect(DummyCypherRecordEdgeClass.realize(:variable)).to eq("[dummy_cypher_record_edge_class]")
+        expect(CypherRecord::RelationshipExample.realize(:variable)).to eq("[cypher_record_relationship_example]")
       end
     end
   end
@@ -61,26 +45,26 @@ RSpec.describe CypherRecord::Relationship do
   describe "#realize" do
     it "correctly formats the edge" do
       expect(subject.realize).to eq(
-        "[n:DummyCypherRecordEdgeClass {one: 1, two: 'two'}]"
+        "[n:CypherRecord_RelationshipExample {foo: 1, bar: 'two'}]"
       )
     end
 
     context "when a variable name is not defined" do
-      subject { DummyCypherRecordEdgeClass.new(one: 1, two: "two") }
+      subject { CypherRecord::RelationshipExample.new(foo: 1, bar: "two") }
 
       it "uses the defaut" do
         expect(subject.realize).to eq(
-          "[dummy_cypher_record_edge_class:DummyCypherRecordEdgeClass {one: 1, two: 'two'}]"
+          "[cypher_record_relationship_example:CypherRecord_RelationshipExample {foo: 1, bar: 'two'}]"
         )
       end
     end
 
     context "when no properties are defined" do
-      subject { CypherRecordEdgeClassWithoutProperties.new(variable_name: :n) }
+      subject { CypherRecord::MutualRelationshipExample.new(variable_name: :n) }
 
       it "does not include the properties" do
         expect(subject.realize).to eq(
-          "[n:CypherRecordEdgeClassWithoutProperties]"
+          "[n:CypherRecord_MutualRelationshipExample]"
         )
       end
     end
@@ -94,17 +78,17 @@ RSpec.describe CypherRecord::Relationship do
 
   describe ".where" do
     it "resolves a query which returns all of the nodes with the correct label" do
-      expect(DummyCypherRecordEdgeClass.where(foo: "Foo").realize).to eq("MATCH [dummy_cypher_record_edge_class:DummyCypherRecordEdgeClass] WHERE dummy_cypher_record_edge_class.foo = 'Foo'")
+      expect(CypherRecord::RelationshipExample.where(foo: "Foo").realize).to eq("MATCH [cypher_record_relationship_example:CypherRecord_RelationshipExample] WHERE cypher_record_relationship_example.foo = 'Foo'")
     end
   end
 
   describe ".find" do
-    let(:query_string) { "MATCH [dummy_cypher_record_edge_class:DummyCypherRecordEdgeClass] WHERE ID(dummy_cypher_record_edge_class) = 1234 RETURN dummy_cypher_record_edge_class LIMIT 1" }
-    let(:relationship) { DummyCypherRecordEdgeClass.new(id: 1234, one: 1, two: "two") }
+    let(:query_string) { "MATCH [cypher_record_relationship_example:CypherRecord_RelationshipExample] WHERE ID(cypher_record_relationship_example) = 1234 RETURN cypher_record_relationship_example LIMIT 1" }
+    let(:relationship) { CypherRecord::RelationshipExample.new(id: 1234, foo: 1, bar: "two") }
 
     it "resolves the query to find the relationship with the matching ID" do
       expect(CypherRecord.engine).to receive(:query).with(query_string).and_return([relationship])
-      expect(DummyCypherRecordEdgeClass.find(1234)).to eq(relationship)
+      expect(CypherRecord::RelationshipExample.find(1234)).to eq(relationship)
     end
   end
 end

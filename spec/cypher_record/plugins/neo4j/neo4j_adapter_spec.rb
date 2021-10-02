@@ -5,25 +5,6 @@ RSpec.describe CypherRecord::Plugins::Neo4jAdapter do
   let(:keys) { [] }
   let(:values) { [] }
   let(:result) { double(keys: keys, values: values) }
-
-  before do
-    module NamespacedNode
-      class Neo4jNodeClass < CypherRecord::Node
-        property :foo
-        property :bar
-      end
-    end
-
-    class Neo4jNodeClass < CypherRecord::Node
-      property :foo
-      property :bar
-    end
-
-    class Neo4jRelationshipClass < CypherRecord::Relationship
-      property :foo
-      property :bar
-    end
-  end
   
   describe ".adapt" do
     context "for single variables" do
@@ -40,29 +21,16 @@ RSpec.describe CypherRecord::Plugins::Neo4jAdapter do
         end
       end
 
-      context "when a namespaced entity is used" do
-        let(:keys) { [:foo] }
-        let(:values) do
-          [
-            Neo4j::Driver::Types::Node.new(123, ["NamespacedNode_Neo4jNodeClass"], {foo: "Foo", bar: "Bar"})
-          ]
-        end
-
-        it "creates an instance of the required class type" do
-          expect(described_class.adapt(result)).to be_a(NamespacedNode::Neo4jNodeClass)
-        end
-      end
-
       context "for a node" do
         let(:keys) { [:foo] }
         let(:values) do
           [
-            Neo4j::Driver::Types::Node.new(123, ["Neo4jNodeClass"], {foo: "Foo", bar: "Bar"})
+            Neo4j::Driver::Types::Node.new(123, ["CypherRecord_NodeExample"], {foo: "Foo", bar: "Bar"})
           ]
         end
 
         it "creates an instance of the required class type" do
-          expect(described_class.adapt(result)).to be_a(Neo4jNodeClass)
+          expect(described_class.adapt(result)).to be_a(CypherRecord::NodeExample)
         end
 
         it "creates the correct properties" do
@@ -78,12 +46,12 @@ RSpec.describe CypherRecord::Plugins::Neo4jAdapter do
         let(:keys) { [:foo] }
         let(:values) do
           [
-            Neo4j::Driver::Types::Relationship.new(123, 1, 2, "Neo4jRelationshipClass", {foo: "Foo", bar: "Bar"})
+            Neo4j::Driver::Types::Relationship.new(123, 1, 2, "CypherRecord_RelationshipExample", {foo: "Foo", bar: "Bar"})
           ]
         end
 
         it "creates an instance of the required class type" do
-          expect(described_class.adapt(result)).to be_a(Neo4jRelationshipClass)
+          expect(described_class.adapt(result)).to be_a(CypherRecord::RelationshipExample)
         end
 
         it "creates the correct properties" do
@@ -109,13 +77,13 @@ RSpec.describe CypherRecord::Plugins::Neo4jAdapter do
       let(:keys) { [:node_key, :rel_key] }
       let(:values) do
         [
-          Neo4j::Driver::Types::Node.new(123, ["Neo4jNodeClass"], {foo: "Node foo", bar: "Node bar"}),
-          Neo4j::Driver::Types::Relationship.new(456, 1, 2, "Neo4jRelationshipClass", {foo: "Rel foo", bar: "Rel bar"})
+          Neo4j::Driver::Types::Node.new(123, ["CypherRecord_NodeExample"], {foo: "Node foo", bar: "Node bar"}),
+          Neo4j::Driver::Types::Relationship.new(456, 1, 2, "CypherRecord_RelationshipExample", {foo: "Rel foo", bar: "Rel bar"})
         ]
       end
 
       it "returns the correct data types" do
-        expect(described_class.adapt(result).map(&:class)).to eq([Neo4jNodeClass, Neo4jRelationshipClass])
+        expect(described_class.adapt(result).map(&:class)).to eq([CypherRecord::NodeExample, CypherRecord::RelationshipExample])
       end
 
       it "returns the correct properties" do

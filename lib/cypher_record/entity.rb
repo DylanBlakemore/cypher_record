@@ -123,7 +123,7 @@ module CypherRecord
     def formatted_properties
       @formatted_properties ||= properties.map do |(property, value)|
         "#{property}: #{CypherRecord::Format.property(value)}" if value
-      end.join(", ")
+      end.compact.join(", ")
     end
 
     def self.left_tokenizer

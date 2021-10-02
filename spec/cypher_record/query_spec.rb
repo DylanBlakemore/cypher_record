@@ -2,17 +2,12 @@ require "spec_helper"
 
 RSpec.describe CypherRecord::Query do
 
-  class QueryDummyNodeClass < CypherRecord::Node
-    property :foo
-    property :bar
-  end
-
-  let(:node) { QueryDummyNodeClass.new(variable_name: :n, foo: "foo", bar: "bar") }
+  let(:node) { CypherRecord::NodeExample.new(variable_name: :n, foo: "foo", bar: "bar") }
   let(:query) { described_class.new }
   let(:base_query) { described_class.new(entity: node) }
   
   describe "#create" do
-    let(:query_string) { "CREATE (n:QueryDummyNodeClass {foo: 'foo', bar: 'bar'})" }
+    let(:query_string) { "CREATE (n:CypherRecord_NodeExample {foo: 'foo', bar: 'bar'})" }
 
     it "builds the correct query" do
       expect(query.create(node).realize).to eq(query_string)
@@ -25,10 +20,10 @@ RSpec.describe CypherRecord::Query do
     end
 
     context "with return" do
-      let(:query_string) { "CREATE (n:QueryDummyNodeClass {foo: 'foo', bar: 'bar'}) RETURN n" }
+      let(:query_string) { "CREATE (n:CypherRecord_NodeExample {foo: 'foo', bar: 'bar'}) RETURN n" }
 
       it "builds the correct query" do
-        expect(query.create(node).return(node).realize).to eq("CREATE (n:QueryDummyNodeClass {foo: 'foo', bar: 'bar'}) RETURN n")
+        expect(query.create(node).return(node).realize).to eq("CREATE (n:CypherRecord_NodeExample {foo: 'foo', bar: 'bar'}) RETURN n")
       end
 
       context "with a base entity" do
@@ -40,7 +35,7 @@ RSpec.describe CypherRecord::Query do
   end
 
   describe "#match" do
-    let(:query_string) { "MATCH (n:QueryDummyNodeClass {foo: 'foo', bar: 'bar'})" }
+    let(:query_string) { "MATCH (n:CypherRecord_NodeExample {foo: 'foo', bar: 'bar'})" }
 
     it "builds the correct query" do
       expect(query.match(node).realize).to eq(query_string)
@@ -54,7 +49,7 @@ RSpec.describe CypherRecord::Query do
   end
 
   describe "#merge" do
-    let(:query_string) { "MERGE (n:QueryDummyNodeClass {foo: 'foo', bar: 'bar'})" }
+    let(:query_string) { "MERGE (n:CypherRecord_NodeExample {foo: 'foo', bar: 'bar'})" }
 
     it "builds the correct query" do
       expect(query.merge(node).realize).to eq(query_string)
@@ -133,16 +128,16 @@ RSpec.describe CypherRecord::Query do
 
   describe "#resolve" do
     it "uses the engine to resolve the query" do
-      expect(CypherRecord.engine).to receive(:query).with("MATCH (n:QueryDummyNodeClass {foo: 'foo', bar: 'bar'})").and_return nil
+      expect(CypherRecord.engine).to receive(:query).with("MATCH (n:CypherRecord_NodeExample {foo: 'foo', bar: 'bar'})").and_return nil
       query.match(node).resolve
     end
   end
 
   describe "#where" do
-    let(:query_string) { "WHERE query_dummy_node_class.foo = 'Foo 1' AND query_dummy_node_class.bar = 'Bar 1'" }
+    let(:query_string) { "WHERE cypher_record_node_example.foo = 'Foo 1' AND cypher_record_node_example.bar = 'Bar 1'" }
 
     it "builds the correct query" do
-      expect(described_class.new(entity: QueryDummyNodeClass).where(foo: "Foo 1", bar: "Bar 1").realize).to eq(query_string)
+      expect(described_class.new(entity: CypherRecord::NodeExample).where(foo: "Foo 1", bar: "Bar 1").realize).to eq(query_string)
     end
 
     context "with an optional entity" do

@@ -2,17 +2,7 @@ require "spec_helper"
 
 RSpec.describe CypherRecord::Node do
 
-  class DummyCypherRecordRelationshipClass < CypherRecord::Relationship; end
-
-  class DummyCypherRecordNodeClass < CypherRecord::Node
-    property :one
-    property :two
-  end
-
-  class CypherRecordNodeClassWithoutProperties < CypherRecord::Node
-  end
-
-  subject { DummyCypherRecordNodeClass.new(variable_name: :n, one: 1, two: "two") }
+  subject { CypherRecord::NodeExample.new(variable_name: :n, foo: 1, bar: "two") }
 
   describe ".relationships" do
     let!(:expected_relationships) do
@@ -28,9 +18,9 @@ RSpec.describe CypherRecord::Node do
   end
 
   describe "relationship queries" do
-    let(:parent_node) { CypherRecord::NodeExample.new(id: 123, title: "Foo", description: "Bar") }
+    let(:parent_node) { CypherRecord::NodeExample.new(id: 123, foo: "Foo", bar: "Bar") }
     let(:query_string) do
-      "MATCH (cypher_record_node_example_123:CypherRecord_NodeExample {title: 'Foo', description: 'Bar'})"\
+      "MATCH (cypher_record_node_example_123:CypherRecord_NodeExample {foo: 'Foo', bar: 'Bar'})"\
       "-[cypher_record_relationship_example:CypherRecord_RelationshipExample]"\
       "->(cypher_record_child_node_example:CypherRecord_ChildNodeExample) "\
       "WHERE ID(cypher_record_node_example_123) = 123"
@@ -38,6 +28,15 @@ RSpec.describe CypherRecord::Node do
 
     let(:return_query_string) do
       query_string.concat(" RETURN cypher_record_child_node_example")
+    end
+
+    it "responds to the query keys" do
+      expect(parent_node.respond_to?(:child_node_examples)).to eq(true)
+      expect(parent_node.respond_to?(:node_examples)).to eq(true)
+    end
+
+    it "behaves normally for missing methods" do
+      expect { parent_node.undefined_method }.to raise_error(NoMethodError)
     end
 
     it "creates a query for the related nodes" do
@@ -61,22 +60,22 @@ RSpec.describe CypherRecord::Node do
   describe ".create" do
     it "creates the node with the default variable name" do
       expect(CypherRecord.engine).to receive(:query).with(
-        "CREATE (dummy_cypher_record_node_class:DummyCypherRecordNodeClass {one: 1, two: 'two'}) RETURN dummy_cypher_record_node_class"
+        "CREATE (cypher_record_node_example:CypherRecord_NodeExample {foo: 1, bar: 'two'}) RETURN cypher_record_node_example"
       )
-      DummyCypherRecordNodeClass.create(one: 1, two: "two")
+      CypherRecord::NodeExample.create(foo: 1, bar: "two")
     end
   end
 
   describe ".realize" do
     it "correctly formats the node" do
-      expect(DummyCypherRecordNodeClass.realize).to eq(
-        "(dummy_cypher_record_node_class:DummyCypherRecordNodeClass)"
+      expect(CypherRecord::NodeExample.realize).to eq(
+        "(cypher_record_node_example:CypherRecord_NodeExample)"
       )
     end
 
     context "when the variable token is requested" do
       it "correctly formats the node" do
-        expect(DummyCypherRecordNodeClass.realize(:variable)).to eq("(dummy_cypher_record_node_class)")
+        expect(CypherRecord::NodeExample.realize(:variable)).to eq("(cypher_record_node_example)")
       end
     end
   end
@@ -84,26 +83,26 @@ RSpec.describe CypherRecord::Node do
   describe "#realize" do
     it "correctly formats the node" do
       expect(subject.realize).to eq(
-        "(n:DummyCypherRecordNodeClass {one: 1, two: 'two'})"
+        "(n:CypherRecord_NodeExample {foo: 1, bar: 'two'})"
       )
     end
 
     context "when a variable name is not defined" do
-      subject { DummyCypherRecordNodeClass.new(one: 1, two: "two") }
+      subject { CypherRecord::NodeExample.new(foo: 1, bar: "two") }
 
       it "uses the default" do
         expect(subject.realize).to eq(
-          "(dummy_cypher_record_node_class:DummyCypherRecordNodeClass {one: 1, two: 'two'})"
+          "(cypher_record_node_example:CypherRecord_NodeExample {foo: 1, bar: 'two'})"
         )
       end
     end
 
     context "when no properties are defined" do
-      subject { CypherRecordNodeClassWithoutProperties.new(variable_name: :n) }
+      subject { CypherRecord::ChildNodeExample.new(variable_name: :n) }
 
       it "does not include the properties" do
         expect(subject.realize).to eq(
-          "(n:CypherRecordNodeClassWithoutProperties)"
+          "(n:CypherRecord_ChildNodeExample)"
         )
       end
     end
@@ -123,17 +122,17 @@ RSpec.describe CypherRecord::Node do
 
   describe ".where" do
     it "resolves a query which returns all of the nodes with the correct label" do
-      expect(DummyCypherRecordNodeClass.where(foo: "Foo").realize).to eq("MATCH (dummy_cypher_record_node_class:DummyCypherRecordNodeClass) WHERE dummy_cypher_record_node_class.foo = 'Foo'")
+      expect(CypherRecord::NodeExample.where(foo: "Foo").realize).to eq("MATCH (cypher_record_node_example:CypherRecord_NodeExample) WHERE cypher_record_node_example.foo = 'Foo'")
     end
   end
 
   describe ".find" do
-    let(:query_string) { "MATCH (dummy_cypher_record_node_class:DummyCypherRecordNodeClass) WHERE ID(dummy_cypher_record_node_class) = 1234 RETURN dummy_cypher_record_node_class LIMIT 1" }
-    let(:node) { DummyCypherRecordNodeClass.new(id: 1234, one: 1, two: "two") }
+    let(:query_string) { "MATCH (cypher_record_node_example:CypherRecord_NodeExample) WHERE ID(cypher_record_node_example) = 1234 RETURN cypher_record_node_example LIMIT 1" }
+    let(:node) { CypherRecord::NodeExample.new(id: 1234, one: 1, two: "two") }
 
     it "resolves the query to find the node with the matching ID" do
       expect(CypherRecord.engine).to receive(:query).with(query_string).and_return([node])
-      expect(DummyCypherRecordNodeClass.find(1234)).to eq(node)
+      expect(CypherRecord::NodeExample.find(1234)).to eq(node)
     end
   end
 end
