@@ -146,4 +146,40 @@ RSpec.describe CypherRecord::Node do
       CypherRecord::NodeExample.find_by(foo: "Foo")
     end
   end
+
+  describe ".find_or_create" do
+    let(:query_string) do
+      "MERGE (cypher_record_node_example:CypherRecord_NodeExample {foo: 1, bar: 'two'}) RETURN cypher_record_node_example"
+    end
+
+    it "creates a query to find or create the node" do
+      expect(CypherRecord.engine).to receive(:query).with(query_string)
+      CypherRecord::NodeExample.find_or_create(foo: 1, bar: "two")
+    end
+  end
+
+  describe "#add_relation" do
+    let(:query_string) do
+      "MERGE (cypher_record_node_example_123:CypherRecord_NodeExample {foo: 'Foo', bar: 'Bar'}) "\
+      "MERGE (cypher_record_node_example_456:CypherRecord_NodeExample {foo: 'Foo 2', bar: 'Bar 2'}) "\
+      "CREATE (cypher_record_node_example_123)-[cypher_record_mutual_relationship_example:CypherRecord_MutualRelationshipExample]->(cypher_record_node_example_456) "\
+      "RETURN cypher_record_mutual_relationship_example"
+    end
+
+    let(:parent_node) { CypherRecord::NodeExample.new(id: 123, foo: "Foo", bar: "Bar") }
+    let(:child_node) { CypherRecord::NodeExample.new(id: 456, foo: "Foo 2", bar: "Bar 2") }
+
+    it "creates the query needed to relate to another node" do
+      expect(CypherRecord.engine).to receive(:query).with(query_string)
+      parent_node.add_relation(:node_example, child_node)
+    end
+
+    context "when the child class does not match the expected class in the relationship" do
+      let(:child_node) { CypherRecord::ChildNodeExample.new }
+
+      it "raises an exception" do
+        expect { parent_node.add_relation(:node_example, child_node) }.to raise_error(ArgumentError, "Related node is not a CypherRecord::NodeExample")
+      end
+    end
+  end
 end

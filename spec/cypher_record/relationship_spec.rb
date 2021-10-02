@@ -22,7 +22,7 @@ RSpec.describe CypherRecord::Relationship do
 
     it "correctly formats the query" do
       expect(CypherRecord.engine).to receive(:query).with(
-        "MATCH (n_1:CypherRecord_NodeExample {foo: 'Foo 1'}) MATCH (n_2:CypherRecord_NodeExample {foo: 'Foo 2'}) CREATE (n_1)-[cypher_record_relationship_example:CypherRecord_RelationshipExample {bar: 'Bar'}]->(n_2) RETURN cypher_record_relationship_example"
+        "MERGE (n_1:CypherRecord_NodeExample {foo: 'Foo 1'}) MERGE (n_2:CypherRecord_NodeExample {foo: 'Foo 2'}) CREATE (n_1)-[cypher_record_relationship_example:CypherRecord_RelationshipExample {bar: 'Bar'}]->(n_2) RETURN cypher_record_relationship_example"
       )
       CypherRecord::RelationshipExample.create(left_node, right_node, bar: "Bar")
     end

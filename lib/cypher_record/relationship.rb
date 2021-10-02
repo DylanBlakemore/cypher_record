@@ -7,8 +7,8 @@ module CypherRecord
       relationship = self.new(variable_name: variable_name, **props)
       path = CypherRecord::Path[relationship].from(left_node, as: :variable).to(right_node, as: :variable)
       CypherRecord::Query.new(entity: relationship)
-        .match(left_node)
-        .match(right_node)
+        .merge(left_node)
+        .merge(right_node)
         .create(path)
         .return
         .resolve
