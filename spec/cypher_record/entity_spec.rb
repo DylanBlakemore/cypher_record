@@ -5,6 +5,8 @@ RSpec.describe CypherRecord::Entity do
   class DummyCypherEntityClass < CypherRecord::Entity
     property :foo
     property :bar
+
+    primary_key :id
   end
 
   let(:klass) { DummyCypherEntityClass }
@@ -17,6 +19,12 @@ RSpec.describe CypherRecord::Entity do
 
   describe "#properties" do
     it { expect(entity.properties).to eq({foo: "Foo", bar: 1}) }
+  end
+
+  describe "#primary_key" do
+    it "can define a primary key" do
+      expect(entity.primary_key).to eq(:id)
+    end
   end
 
   it "assigns the correct instance variables" do

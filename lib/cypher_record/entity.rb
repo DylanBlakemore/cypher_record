@@ -13,6 +13,10 @@ module CypherRecord
       alias_method :property, :attribute
     end
 
+    def self.primary_key(key)
+      @primary_key = key
+    end
+
     def self.property_names
       self.attribute_names.map(&:to_sym)
     end
@@ -80,6 +84,10 @@ module CypherRecord
 
     def properties
       attributes.symbolize_keys
+    end
+
+    def primary_key
+      @primary_key ||= self.class.instance_variable_get(:@primary_key)
     end
 
     private
