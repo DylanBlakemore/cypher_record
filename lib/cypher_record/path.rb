@@ -3,10 +3,6 @@ module CypherRecord
 
     attr_reader :parent, :relationship, :child
 
-    def self.[](relationship)
-      self.new(relationship: relationship)
-    end
-
     def initialize(parent: nil, relationship: nil, child: nil)
       @relationship = relationship
       @child = child

@@ -2,13 +2,7 @@ require "spec_helper"
 
 RSpec.describe CypherRecord::Path do
   
-  subject { described_class[CypherRecord::RelationshipExample] }
-
-  describe ".[]" do
-    it "returns an instance with the correct relationship" do
-      expect(subject.relationship).to eq(CypherRecord::RelationshipExample)
-    end
-  end
+  subject { described_class.new(relationship: CypherRecord::RelationshipExample) }
 
   describe "#from" do
     it "sets the parent node" do

@@ -60,7 +60,7 @@ module CypherRecord
     end
 
     def self.create_path(node, relation)
-      CypherRecord::Path[resolve_key(relation)].to(resolve_key(node))
+      CypherRecord::Path.new(relationship: resolve_key(relation), child: resolve_key(node))
     end
 
     def self.resolve_key(key)

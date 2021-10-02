@@ -7,8 +7,8 @@ RSpec.describe CypherRecord::Node do
   describe ".relationships" do
     let!(:expected_relationships) do
       {
-        child_node_examples: CypherRecord::Path[CypherRecord::RelationshipExample].to(CypherRecord::ChildNodeExample),
-        node_examples: CypherRecord::Path[CypherRecord::MutualRelationshipExample].to(CypherRecord::NodeExample)
+        child_node_examples: CypherRecord::Path.new(relationship: CypherRecord::RelationshipExample).to(CypherRecord::ChildNodeExample),
+        node_examples: CypherRecord::Path.new(relationship: CypherRecord::MutualRelationshipExample).to(CypherRecord::NodeExample)
       }
     end
 
