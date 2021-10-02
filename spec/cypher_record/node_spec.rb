@@ -162,7 +162,7 @@ RSpec.describe CypherRecord::Node do
     let(:query_string) do
       "MERGE (cypher_record_node_example_123:CypherRecord_NodeExample {foo: 'Foo', bar: 'Bar'}) "\
       "MERGE (cypher_record_node_example_456:CypherRecord_NodeExample {foo: 'Foo 2', bar: 'Bar 2'}) "\
-      "CREATE (cypher_record_node_example_123)-[cypher_record_mutual_relationship_example:CypherRecord_MutualRelationshipExample]->(cypher_record_node_example_456) "\
+      "MERGE (cypher_record_node_example_123)-[cypher_record_mutual_relationship_example:CypherRecord_MutualRelationshipExample]->(cypher_record_node_example_456) "\
       "RETURN cypher_record_mutual_relationship_example"
     end
 

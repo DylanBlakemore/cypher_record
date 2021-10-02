@@ -9,7 +9,7 @@ module CypherRecord
       CypherRecord::Query.new(entity: relationship)
         .merge(left_node)
         .merge(right_node)
-        .create(path)
+        .merge(path)
         .return
         .resolve
     end
