@@ -4,7 +4,7 @@ module CypherRecord
     tokenize_with "(", ")"
 
     def self.has_many(key, via:)
-      relationship_definition = create_relationship_definition(singularize(key), via)
+      relationship_definition = create_path(singularize(key), via)
       relationships[key] = relationship_definition
     end
 
@@ -35,7 +35,7 @@ module CypherRecord
       key.to_s.singularize.to_sym
     end
 
-    def self.create_relationship_definition(node, relation)
+    def self.create_path(node, relation)
       CypherRecord::Path[resolve_key(relation)].to(resolve_key(node))
     end
 
