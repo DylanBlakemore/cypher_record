@@ -86,4 +86,15 @@ RSpec.describe CypherRecord::Entity do
       CypherRecord::Entity.find(1234)
     end
   end
+
+  describe ".find_by" do
+    let(:query_string) do
+      "MATCH dummy_cypher_entity_class:DummyCypherEntityClass {foo: 'Foo'} RETURN dummy_cypher_entity_class LIMIT 1"
+    end
+
+    it "creates the query to find the entity" do
+      expect(CypherRecord.engine).to receive(:query).with(query_string)
+      DummyCypherEntityClass.find_by(foo: "Foo")
+    end
+  end
 end

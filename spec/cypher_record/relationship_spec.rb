@@ -91,4 +91,15 @@ RSpec.describe CypherRecord::Relationship do
       expect(CypherRecord::RelationshipExample.find(1234)).to eq(relationship)
     end
   end
+
+  describe ".find_by" do
+    let(:query_string) do
+      "MATCH [cypher_record_relationship_example:CypherRecord_RelationshipExample {foo: 'Foo'}] RETURN cypher_record_relationship_example LIMIT 1"
+    end
+
+    it "creates the query to find the entity" do
+      expect(CypherRecord.engine).to receive(:query).with(query_string)
+      CypherRecord::RelationshipExample.find_by(foo: "Foo")
+    end
+  end
 end

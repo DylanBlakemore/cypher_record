@@ -135,4 +135,15 @@ RSpec.describe CypherRecord::Node do
       expect(CypherRecord::NodeExample.find(1234)).to eq(node)
     end
   end
+
+  describe ".find_by" do
+    let(:query_string) do
+      "MATCH (cypher_record_node_example:CypherRecord_NodeExample {foo: 'Foo'}) RETURN cypher_record_node_example LIMIT 1"
+    end
+
+    it "creates the query to find the entity" do
+      expect(CypherRecord.engine).to receive(:query).with(query_string)
+      CypherRecord::NodeExample.find_by(foo: "Foo")
+    end
+  end
 end

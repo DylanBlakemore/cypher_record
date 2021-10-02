@@ -44,6 +44,10 @@ module CypherRecord
       all.where(id: id).return.limit(1).resolve&.first
     end
 
+    def self.find_by(**props)
+      CypherRecord::Query.new(entity: self.new(**props)).match.return.limit(1).resolve&.first
+    end
+
     ##
 
     def initialize(id: nil, variable_name: self.class.variable_name, **props)
