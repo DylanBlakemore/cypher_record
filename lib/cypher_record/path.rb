@@ -10,22 +10,12 @@ module CypherRecord
     end
 
     def from(entity, as: :entity)
-      parent_value = case as
-        when :entity
-          entity
-        when :variable
-          entity.realize(:variable)
-        end
+      parent_value = realize_entity(entity, as)
       CypherRecord::Path.new(parent: parent_value, relationship: relationship, child: child)
     end
 
     def to(entity, as: :entity)
-      child_value = case as
-      when :entity
-        entity
-      when :variable
-        entity.realize(:variable)
-      end
+      child_value = realize_entity(entity, as)
       CypherRecord::Path.new(parent: parent, relationship: relationship, child: child_value)
     end
 
@@ -38,6 +28,11 @@ module CypherRecord
     end
 
     private
+
+    def realize_entity(entity, type)
+      return entity if type == :entity
+      return entity.realize(:variable) if type == :variable
+    end
 
     def entity_string(value, type=:entity)
       return value.to_s unless value.respond_to?(:realize)
