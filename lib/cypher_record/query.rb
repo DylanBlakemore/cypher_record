@@ -16,7 +16,7 @@ module CypherRecord
     end
 
     def resolve
-      CypherRecord.engine.query(self.realize)
+      CypherRecord.driver.query(self.realize)
     end
 
   end

@@ -1,5 +1,5 @@
 module CypherRecord
-  class Engine
+  class Driver
 
     def query(query)
       raise(NotImplementedError, "#{self.class} must implement a 'query' method")

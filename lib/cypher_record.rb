@@ -12,8 +12,8 @@ require_relative "cypher_record/version"
 require_relative "cypher_record/util/format"
 require_relative "cypher_record/util/class_resolver"
 
-# Query Engine
-require_relative "cypher_record/engine"
+# Query Driver
+require_relative "cypher_record/driver"
 require_relative "cypher_record/entity_adapter"
 
 # Models
@@ -39,8 +39,8 @@ module CypherRecord
   class LabelError < StandardError; end
   class EntityTypeError < StandardError; end
 
-  def self.engine
-    @engine ||= config.engine
+  def self.driver
+    @driver ||= config.driver
   end
 
   def self.configure(&block)
@@ -51,17 +51,17 @@ module CypherRecord
 
   class Config
 
-    def self.engine
-      @engine
+    def self.driver
+      @driver
     end
 
-    def self.engine=(db_engine)
-      raise(ArgumentError, "Database engine should be a CypherRecord::Engine") unless db_engine.is_a?(CypherRecord::Engine)
-      @engine = db_engine
+    def self.driver=(db_driver)
+      raise(ArgumentError, "Database driver should be a CypherRecord::Driver") unless db_driver.is_a?(CypherRecord::Driver)
+      @driver = db_driver
     end
 
     def self.reset!
-      @engine = nil
+      @driver = nil
     end
 
   end

@@ -5,15 +5,15 @@ RSpec.describe CypherRecord do
     expect(CypherRecord::VERSION).not_to be nil
   end
 
-  it "can configure the engine" do
+  it "can configure the driver" do
     CypherRecord.configure do |config|
-      config.engine = CypherRecord::Engine.new
+      config.driver = CypherRecord::Driver.new
     end
 
-    expect(CypherRecord.engine).to be_a(CypherRecord::Engine)
+    expect(CypherRecord.driver).to be_a(CypherRecord::Driver)
   end
 
-  it "raises an error when an invalid engine is defined" do
-    expect { CypherRecord.configure { |config| config.engine = "foo" } }.to raise_error(ArgumentError, "Database engine should be a CypherRecord::Engine")
+  it "raises an error when an invalid driver is defined" do
+    expect { CypherRecord.configure { |config| config.driver = "foo" } }.to raise_error(ArgumentError, "Database driver should be a CypherRecord::Driver")
   end
 end

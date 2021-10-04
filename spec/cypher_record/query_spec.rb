@@ -127,8 +127,8 @@ RSpec.describe CypherRecord::Query do
   end
 
   describe "#resolve" do
-    it "uses the engine to resolve the query" do
-      expect(CypherRecord.engine).to receive(:query).with("MATCH (n:CypherRecord_NodeExample {foo: 'foo', bar: 'bar'})").and_return nil
+    it "uses the driver to resolve the query" do
+      expect(CypherRecord.driver).to receive(:query).with("MATCH (n:CypherRecord_NodeExample {foo: 'foo', bar: 'bar'})").and_return nil
       query.match(node).resolve
     end
   end

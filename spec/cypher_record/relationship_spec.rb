@@ -21,7 +21,7 @@ RSpec.describe CypherRecord::Relationship do
     let(:right_node) { CypherRecord::NodeExample.new(id: 2, variable_name: :n, foo: "Foo 2") }
 
     it "correctly formats the query" do
-      expect(CypherRecord.engine).to receive(:query).with(
+      expect(CypherRecord.driver).to receive(:query).with(
         "MERGE (n_1:CypherRecord_NodeExample {foo: 'Foo 1', id: 1}) MERGE (n_2:CypherRecord_NodeExample {foo: 'Foo 2', id: 2}) MERGE (n_1)-[cypher_record_relationship_example:CypherRecord_RelationshipExample {bar: 'Bar'}]->(n_2) RETURN cypher_record_relationship_example"
       )
       CypherRecord::RelationshipExample.create(left_node, right_node, bar: "Bar")
@@ -87,7 +87,7 @@ RSpec.describe CypherRecord::Relationship do
     let(:relationship) { CypherRecord::RelationshipExample.new(id: 1234, foo: 1, bar: "two") }
 
     it "resolves the query to find the relationship with the matching ID" do
-      expect(CypherRecord.engine).to receive(:query).with(query_string).and_return([relationship])
+      expect(CypherRecord.driver).to receive(:query).with(query_string).and_return([relationship])
       expect(CypherRecord::RelationshipExample.find(1234)).to eq(relationship)
     end
   end
@@ -98,7 +98,7 @@ RSpec.describe CypherRecord::Relationship do
     end
 
     it "creates the query to find the entity" do
-      expect(CypherRecord.engine).to receive(:query).with(query_string)
+      expect(CypherRecord.driver).to receive(:query).with(query_string)
       CypherRecord::RelationshipExample.find_by(foo: "Foo")
     end
   end

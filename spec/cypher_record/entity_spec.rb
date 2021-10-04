@@ -91,7 +91,7 @@ RSpec.describe CypherRecord::Entity do
 
   describe ".find" do
     it "creates the query to find the first entry by the primary key" do
-      expect(CypherRecord.engine).to receive(:query).with("MATCH dummy_cypher_entity_class_1234:DummyCypherEntityClass {id: 1234} RETURN dummy_cypher_entity_class_1234 LIMIT 1")
+      expect(CypherRecord.driver).to receive(:query).with("MATCH dummy_cypher_entity_class_1234:DummyCypherEntityClass {id: 1234} RETURN dummy_cypher_entity_class_1234 LIMIT 1")
       DummyCypherEntityClass.find(1234)
     end
 
@@ -108,7 +108,7 @@ RSpec.describe CypherRecord::Entity do
     end
 
     it "creates the query to find the entity" do
-      expect(CypherRecord.engine).to receive(:query).with(query_string)
+      expect(CypherRecord.driver).to receive(:query).with(query_string)
       DummyCypherEntityClass.find_by(foo: "Foo")
     end
   end

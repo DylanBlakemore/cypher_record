@@ -58,7 +58,7 @@ RSpec.describe CypherRecord::Node do
 
   describe ".create" do
     it "creates the node with the default variable name" do
-      expect(CypherRecord.engine).to receive(:query).with(
+      expect(CypherRecord.driver).to receive(:query).with(
         "CREATE (cypher_record_node_example:CypherRecord_NodeExample {foo: 1, bar: 'two'}) RETURN cypher_record_node_example"
       )
       CypherRecord::NodeExample.create(foo: 1, bar: "two")
@@ -130,7 +130,7 @@ RSpec.describe CypherRecord::Node do
     let(:node) { CypherRecord::NodeExample.new(id: 1234, one: 1, two: "two") }
 
     it "resolves the query to find the node with the matching ID" do
-      expect(CypherRecord.engine).to receive(:query).with(query_string).and_return([node])
+      expect(CypherRecord.driver).to receive(:query).with(query_string).and_return([node])
       expect(CypherRecord::NodeExample.find(1234)).to eq(node)
     end
   end
@@ -141,7 +141,7 @@ RSpec.describe CypherRecord::Node do
     end
 
     it "creates the query to find the entity" do
-      expect(CypherRecord.engine).to receive(:query).with(query_string)
+      expect(CypherRecord.driver).to receive(:query).with(query_string)
       CypherRecord::NodeExample.find_by(foo: "Foo")
     end
   end
@@ -152,7 +152,7 @@ RSpec.describe CypherRecord::Node do
     end
 
     it "creates a query to find or create the node" do
-      expect(CypherRecord.engine).to receive(:query).with(query_string)
+      expect(CypherRecord.driver).to receive(:query).with(query_string)
       CypherRecord::NodeExample.find_or_create(foo: 1, bar: "two")
     end
   end
@@ -169,7 +169,7 @@ RSpec.describe CypherRecord::Node do
     let(:child_node) { CypherRecord::NodeExample.new(id: 456, foo: "Foo 2", bar: "Bar 2") }
 
     it "creates the query needed to relate to another node" do
-      expect(CypherRecord.engine).to receive(:query).with(query_string)
+      expect(CypherRecord.driver).to receive(:query).with(query_string)
       parent_node.add_relation(:node_example, child_node)
     end
 

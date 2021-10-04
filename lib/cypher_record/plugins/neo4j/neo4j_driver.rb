@@ -1,7 +1,7 @@
 
 module CypherRecord
   module Plugins
-    class Neo4jEngine < CypherRecord::Engine
+    class Neo4jDriver < CypherRecord::Driver
 
       attr_reader :uri, :username, :password
 
