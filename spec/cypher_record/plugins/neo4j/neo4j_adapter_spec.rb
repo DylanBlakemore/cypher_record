@@ -6,7 +6,7 @@ RSpec.describe CypherRecord::Plugins::Neo4jAdapter do
   let(:values) { [] }
   let(:result) { double(keys: keys, values: values) }
   
-  describe ".adapt" do
+  xdescribe ".adapt" do
     context "for single variables" do
       context "when the label does not exist as a class" do
         let(:keys) { [:foo] }

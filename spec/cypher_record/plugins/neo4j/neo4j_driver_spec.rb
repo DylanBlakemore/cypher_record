@@ -15,19 +15,19 @@ RSpec.describe CypherRecord::Plugins::Neo4jDriver, type: :neo4j do
   let(:password) { "password" }
   let(:user) { "neo4j" }
 
-  it "sets the uri" do
+  xit "sets the uri" do
     expect(subject.uri).to eq(uri)
   end
 
-  it "sets the password" do
+  xit "sets the password" do
     expect(subject.password).to eq(password)
   end
 
-  it "sets the username" do
+  xit "sets the username" do
     expect(subject.username).to eq(user)
   end
 
-  describe "#query" do
+  xdescribe "#query" do
     before do
       subject.query("CREATE (mock_node_class:MockNodeClass {foo: 'Foo 1', bar: 'Bar 1'})")
       subject.query("CREATE (mock_node_class:MockNodeClass {foo: 'Foo 2', bar: 'Bar 2'})")

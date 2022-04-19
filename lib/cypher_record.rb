@@ -7,37 +7,36 @@ require "securerandom"
 
 require_relative "cypher_record/version"
 
-# Helpers
-
-require_relative "cypher_record/util/format"
-require_relative "cypher_record/util/class_resolver"
-
 # Query Driver
 require_relative "cypher_record/driver"
 require_relative "cypher_record/entity_adapter"
-
-# Models
-require_relative "cypher_record/entity"
-require_relative "cypher_record/node"
-require_relative "cypher_record/relationship"
-require_relative "cypher_record/path"
-
-# Querying
-require_relative "cypher_record/token"
-require_relative "cypher_record/query_methods/base"
-require_relative "cypher_record/query_methods/filtering"
-require_relative "cypher_record/query_methods/writing"
-require_relative "cypher_record/query"
 
 # Backend adapters
 
 require_relative "cypher_record/plugins/neo4j/neo4j_includes"
 
+# DSL
+
+require_relative "cypher_record/dsl/clauses/match"
+require_relative "cypher_record/dsl/clauses/return"
+require_relative "cypher_record/dsl/clauses/create"
+require_relative "cypher_record/dsl/clauses/merge"
+
+require_relative "cypher_record/dsl/token"
+require_relative "cypher_record/dsl/relationship_directions"
+require_relative "cypher_record/dsl/property"
+require_relative "cypher_record/dsl/property_set"
+require_relative "cypher_record/dsl/relatable"
+require_relative "cypher_record/dsl/pattern"
+require_relative "cypher_record/dsl/entity_property"
+require_relative "cypher_record/dsl/entity"
+require_relative "cypher_record/dsl/relationship"
+require_relative "cypher_record/dsl/node"
+
+require_relative "cypher_record/query"
+
 module CypherRecord
   class Error < StandardError; end
-  class AdapterError < StandardError; end
-  class LabelError < StandardError; end
-  class EntityTypeError < StandardError; end
 
   def self.driver
     @driver ||= config.driver

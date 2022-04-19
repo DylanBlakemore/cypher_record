@@ -11,10 +11,6 @@ SimpleCov.start do
 end
 
 require "cypher_record"
-require_relative "dummy/child_node_example"
-require_relative "dummy/relationship_example"
-require_relative "dummy/mutual_relationship_example"
-require_relative "dummy/node_example"
 
 Bundler.setup
 
